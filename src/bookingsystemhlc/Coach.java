@@ -1,5 +1,6 @@
 package bookingsystemhlc;
-
+import java.time.LocalDateTime;
+import java.time.Month;
 /**
  *
  * @author abdul
@@ -8,9 +9,9 @@ public class Coach extends Personnel {
     private String[] expertise;
     private String officeHour;
     
-    public Coach(int id, String fullName, String address, String telephoneNo, String[] expertise, String officeHour){
+    public Coach(String fullName, String address, String telephoneNo, String[] expertise, String officeHour){
         
-        super(id, fullName, address, telephoneNo);   
+        super(fullName, address, telephoneNo);   
         this.expertise = expertise;
         this.officeHour = officeHour;
         
@@ -20,7 +21,7 @@ public class Coach extends Personnel {
         return expertise;
     }
     
-    public String officeHour(){
+    public String getOfficeHour(){
         return officeHour;
     }
     

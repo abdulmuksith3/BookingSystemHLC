@@ -4,19 +4,24 @@
  * and open the template in the editor.
  */
 package bookingsystemhlc;
-
+import java.time.LocalDateTime;
+import java.time.Month;
 /**
  *
  * @author abdul
  */
 public class Lessons {
+    private int id;
     private String name;
     private String place;
     private String dateTime;
     private Coach coach;
     private int capacity;
     
+    private static int lessonCounter = 1;
+    
     public Lessons(String name, String place, String dateTime, Coach coach, int capacity){
+        this.id = lessonCounter++;
         this.name = name;
         this.place = place;
         this.dateTime = dateTime;
@@ -24,6 +29,10 @@ public class Lessons {
         this.capacity = capacity;
         
     }
+     
+    public int getId(){
+        return id;
+    } 
     
     public String getName(){
         return name;

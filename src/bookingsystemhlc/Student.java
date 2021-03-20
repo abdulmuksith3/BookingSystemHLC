@@ -11,8 +11,8 @@ package bookingsystemhlc;
  */
 public class Student extends Personnel{
     
-    public Student(int id, String fullName, String address, String telephoneNo){
-        super(id, fullName, address, telephoneNo);   
+    public Student(String fullName, String address, String telephoneNo){
+        super(fullName, address, telephoneNo);   
     };
     
 }

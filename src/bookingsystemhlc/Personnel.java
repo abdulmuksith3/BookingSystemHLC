@@ -10,13 +10,15 @@ package bookingsystemhlc;
  * @author abdul
  */
 public class Personnel {
-    int id;
+    private int id;
     private String fullName;
     private String address;
     private String telephoneNo;
     
-    public Personnel(int id, String fullName, String address, String telephoneNo){
-       this.id = id;
+    private static int counter = 1;
+    
+    public Personnel(String fullName, String address, String telephoneNo){
+       this.id = counter++;
        this.fullName = fullName;
        this.address = address;
        this.telephoneNo = telephoneNo;
