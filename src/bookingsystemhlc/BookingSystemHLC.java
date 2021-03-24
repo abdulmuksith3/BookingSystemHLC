@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Random;
 /**
  *
  * @author abdul
@@ -31,7 +32,7 @@ public class BookingSystemHLC {
         ArrayList<Coach> coachesAL = generateCoachData();
         ArrayList <Student> studentsAL = generateStudentData();
         ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
-        generateBookingsData();
+        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
         
 //        for (Coach c : coachesAL) {
 //            System.out.println(c.getId() + " " + c.getFullName());
@@ -39,14 +40,20 @@ public class BookingSystemHLC {
 //         for (Student c : studentsAL) {
 //            System.out.println(c.getId() + " " + c.getFullName());
 //        }
+            for (Bookings b : bookingsAL){
+                System.out.println("BookingID: "+b.getId() + "\tLessonName: " + b.getLesson().getName() +" - "+b.getLesson().getId()+ 
+                                                        "\tCoachName: " +b.getLesson().getCoach().getFullName() + "\tStudentName: "+
+                                                            b.getStudent().getFullName() +"\tDateTime"+b.getLesson().getDateTime()+ "\tCapacity: "+b.getLesson().getCapacity());
+            }
+            
     }
     
     public static ArrayList<Coach> generateCoachData(){
-        ArrayList <Coach> coachList = new ArrayList<Coach>();
-        
         //        Coach(String fullName, String address, String telephoneNo, String[] expertise, String officeHour)        
         //        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy HH:mm:ss"); 
         //        Coach rick = new Coach("Rick Grimes", "Hereford", "+44 7700 900140",null, LocalDateTime.of(2021,Month.MARCH,1,4,30).format(myFormatObj));
+        
+        ArrayList <Coach> coachList = new ArrayList<Coach>();       
                 
         Coach coach1 = new Coach("Rick Grimes", "Hereford", "+44 7700 900110",new String[]{"Swimming", "Badminton"}, "Monday, 16:00-17:00"); 
         coachList.add(coach1);
@@ -64,8 +71,10 @@ public class BookingSystemHLC {
         coachList.add(coach5);
         
         Coach coach6 = new Coach("Michonne", "Hereford", "+44 7700 900160",new String[]{"Swimming", "Gymnastics"}, "Friday, 17:00-18:00");
-        coachList.add(coach6);      
+        coachList.add(coach6);
         
+        Coach coach7 = new Coach("Rosita Espinosa", "Worcester", "+44 7700 900170",new String[]{"Fencing"}, "Thursday, 16:00-17:00");
+        coachList.add(coach7);  
         
         return coachList;
         
@@ -73,9 +82,10 @@ public class BookingSystemHLC {
     }
     
     public static ArrayList<Student> generateStudentData(){
-        ArrayList<Student> studentAL = new ArrayList<Student>();
-        
         //        Student(String fullName, String address, String telephoneNo
+        
+        ArrayList<Student> studentAL = new ArrayList<Student>();        
+        
         Student student1 = new Student("Herby Stansell","3rd Parkway","+44 7700 900111");
         studentAL.add(student1);
         
@@ -125,18 +135,107 @@ public class BookingSystemHLC {
     }
     
     public static ArrayList<Lessons> generateLessonsData(ArrayList<Coach> coachesAL){
+        //        Lessons(String name, String place, String dateTime, Coach coach, int capacity)  
         
-        ArrayList<Lessons> lessonsAL = new ArrayList<Lessons>();
-        
-//        Lessons(String name, String place, String dateTime, Coach coach, int capacity)  
+        ArrayList<Lessons> lessonsAL = new ArrayList<Lessons>();       
 
-        Lessons swimmingA = new Lessons("Swimming", "Swimming Pool", "Monday, 16:00-17:00", coachesAL.get(0), 3);
+
+        Lessons lesson1 = new Lessons("Swimming", "Swimming Pool", "2021-03-01T15:00:00", coachesAL.get(0), 3);
+        lessonsAL.add(lesson1);
+        
+        Lessons lesson2 = new Lessons("Badminton", "Badminton Court", "2021-03-02T15:00:00", coachesAL.get(0), 3);
+        lessonsAL.add(lesson2);
+        
+        Lessons lesson3 = new Lessons("Badminton", "Badminton Court", "2021-03-04T16:00:00", coachesAL.get(0), 3);
+        lessonsAL.add(lesson3);
+        
+        Lessons lesson4 = new Lessons("Gymnastics", "Gym", "2021-03-01T16:00:00", coachesAL.get(1), 3);
+        lessonsAL.add(lesson4);
+        
+        Lessons lesson5 = new Lessons("Gymnastics", "Gym", "2021-03-04T15:00:00", coachesAL.get(1), 3);
+        lessonsAL.add(lesson5);
+        
+        Lessons lesson6 = new Lessons("Tennis", "Tennis Court", "2021-03-04T17:00:00", coachesAL.get(1), 3);
+        lessonsAL.add(lesson6);
+        
+        Lessons lesson7 = new Lessons("Football", "Football Field", "2021-03-01T18:00:00", coachesAL.get(2), 3);
+        lessonsAL.add(lesson7);
+        
+        Lessons lesson8 = new Lessons("Cricket", "Cricket Field", "2021-03-03T15:00:00", coachesAL.get(2), 3);
+        lessonsAL.add(lesson8);
+        
+        Lessons lesson9 = new Lessons("Football", "Football Field", "2021-03-05T17:00:00", coachesAL.get(2), 3);
+        lessonsAL.add(lesson9);
+        
+        Lessons lesson10 = new Lessons("Archery", "Archery Arena", "2021-03-01T17:00:00", coachesAL.get(3), 3);
+        lessonsAL.add(lesson10);
+        
+        Lessons lesson11 = new Lessons("Archery", "Archery Arena", "2021-03-03T16:00:00", coachesAL.get(3), 3);
+        lessonsAL.add(lesson11);
+        
+        Lessons lesson12 = new Lessons("Archery", "Archery Arena", "2021-03-04T17:00:00", coachesAL.get(3), 3);
+        lessonsAL.add(lesson12);
+        
+        Lessons lesson13 = new Lessons("Tennis", "Tennis Court", "2021-03-01T17:00:00", coachesAL.get(4), 3);
+        lessonsAL.add(lesson13);
+        
+        Lessons lesson14 = new Lessons("Tennis", "Tennis Court", "2021-03-02T16:00:00", coachesAL.get(4), 3);
+        lessonsAL.add(lesson14);
+        
+        Lessons lesson15 = new Lessons("Tennis", "Tennis Court", "2021-03-05T16:00:00", coachesAL.get(4), 3);
+        lessonsAL.add(lesson15);
+        
+        Lessons lesson16 = new Lessons("Gymnastics", "Gym", "2021-03-02T17:00:00", coachesAL.get(5), 3);
+        lessonsAL.add(lesson16);
+        
+        Lessons lesson17 = new Lessons("Swimming", "Swimming Pool", "2021-03-03T17:00:00", coachesAL.get(5), 3);
+        lessonsAL.add(lesson17);
+        
+        Lessons lesson18 = new Lessons("Swimming", "Swimming Pool", "2021-03-05T15:00:00", coachesAL.get(5), 3);
+        lessonsAL.add(lesson18);
+        
+        Lessons lesson19 = new Lessons("Fencing", "Fencing Piste", "2021-03-02T16:00:00", coachesAL.get(6), 3);
+        lessonsAL.add(lesson19);
+        
+        Lessons lesson20 = new Lessons("Fencing", "Fencing Piste", "2021-03-03T18:00:00", coachesAL.get(6), 3);
+        lessonsAL.add(lesson20);
+        
+        Lessons lesson21 = new Lessons("Fencing", "Fencing Piste", "2021-03-04T18:00:00", coachesAL.get(6), 3);
+        lessonsAL.add(lesson21);
+        
         
         return lessonsAL;
     }
-    public static void generateBookingsData(){
-        //        Bookings (Student student, Lessons lesson )
-        //        Bookings (Coach coach, String note, int slot)
+    public static ArrayList<Bookings> generateBookingsData(ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL){
+        //        Bookings (Student student, Lessons lesson ) for Lesson Booking
+        //        Bookings (Coach coach, String note, int slot) for Office Hour Booking
+        ArrayList<Bookings> bookingsAL = new ArrayList<Bookings>();
+        Random rand = new Random();    
+        int randomIndex;
+        Lessons lesson = null;
+        
+                
+        for (Student student : studentsAL) {
+            
+           boolean capacityCheck = false;
+           
+           while(!capacityCheck){
+               randomIndex = rand.nextInt(lessonsAL.size());
+               lesson = lessonsAL.get(randomIndex);
+               int capacity = lesson.getCapacity(); 
+               
+               if(capacity > 0) {
+                   lesson.setCapacity(capacity-1);
+                   capacityCheck = true;
+               }              
+               
+           }       
+           bookingsAL.add(new Bookings(student, lesson));
+        }
+        
+        return bookingsAL;
+        
+        
     }
     
 }

@@ -53,4 +53,8 @@ public class Lessons {
     public int getCapacity(){
         return capacity;
     }
+    
+    public void setCapacity(int value){
+        this.capacity=value;
+    }
 }
