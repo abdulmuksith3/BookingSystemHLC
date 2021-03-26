@@ -17,8 +17,17 @@ public class Coach extends Personnel {
         
     }
     
-    public String[] getExpertise(){
+     public String[] getExpertise(){
+       
         return expertise;
+    }
+    
+    public String getExpertiseString(){
+        String exp="";
+        for(String s : expertise){
+            exp+=s+", ";
+        }
+        return exp;
     }
     
     public String getOfficeHour(){

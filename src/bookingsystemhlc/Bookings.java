@@ -18,24 +18,27 @@ public class Bookings {
     private Coach coach;
     private String note;
     private int slot;
+    private String status;
     
     private String bookingType;
     
     private static int bookingCounter = 1;
     
-    public Bookings (Student student, Lessons lesson ){
+    public Bookings (Student student, Lessons lesson, String status ){
         this.id = bookingCounter++;
         this.student = student;
         this.lesson = lesson; 
         this.bookingType = "Lesson";
+        this.status = status;
     }
     
-     public Bookings (Coach coach, String note, int slot){
+     public Bookings (Coach coach, String note, int slot, String status){
         this.id = bookingCounter++;
         this.coach = coach;
         this.note = note;
         this.slot = slot;
         this.bookingType = "Appointment";
+        this.status = status;
     }
     
     public int getId(){
