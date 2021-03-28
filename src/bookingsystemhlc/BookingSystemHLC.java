@@ -25,28 +25,64 @@ public class BookingSystemHLC {
         ArrayList <Student> studentsAL = generateStudentData();
         ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
         ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
+        
         System.out.println("Data Loaded");
-        
         Scanner input = new Scanner(System.in); 
-        System.out.print("Enter Coach Name: ");
-        String coachName = input.nextLine();
         
-        System.out.print("Enter Expertise: ");
-        String lessonName = input.nextLine();
+        System.out.println("Enter Student Name: ");
+//        String studentName = input.nextLine();        
+        String studentName = "Reeta"; 
         
-////////////        Coach Search        ///////////////
+        System.out.println("Enter Coach Name: ");
+//        String coachName = input.nextLine();
+        String coachName = "Rick Grimes";
+         
+        System.out.println("Enter Expertise: ");
+//        String lessonName = input.nextLine();
+        String lessonName = "Swimming";
+        
+        
+        
+////////////        Coach Search & Get Lessons        ///////////////
+System.out.println("--------------------------------------------------------------");
+        Coach chosenCoach=null;
+        ArrayList <Lessons> coachLessonsAL = new ArrayList<Lessons>();
         for(Coach c : coachesAL){            
-            if(c.getFullName().toLowerCase().contains(coachName.toLowerCase())){
-                System.out.println(c.getId()+"\t"+c.getFullName()+ "\t"+c.getExpertise()+"\t"+c.getOfficeHour());
+            if(c.getFullName().toLowerCase().equals(coachName.toLowerCase())){
+                System.out.println(c.getId()+"\t"+c.getFullName()+ "\t"+c.getExpertiseString()+"\t"+c.getOfficeHour());
+                chosenCoach = c;
             }
         }
         
-///////////        Lesson Search        ////////////////
+        for(Lessons l:lessonsAL){
+            if(l.getCoach()==chosenCoach){
+                coachLessonsAL.add(l);
+                 System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
+            }
+        }
+        
+        
+        
+        
+        
+        
+///////////        Expertise Search & Get Lessons        ////////////////
+System.out.println("--------------------------------------------------------------");
         for(Lessons l : lessonsAL){
             if(l.getName().toLowerCase().contains(lessonName.toLowerCase())){
                 System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
             }
         }
+        
+        
+        
+System.out.println("--------------------------------------------------------------");
+        for (Bookings b : bookingsAL){
+                System.out.println("BookingID: "+b.getId() + "\tLessonName: " + b.getLesson().getName() +" - "+b.getLesson().getId()+ 
+                                                        "\tCoachName: " +b.getLesson().getCoach().getFullName() + "\tStudentName: "+
+                                                            b.getStudent().getFullName() +"\tDateTime"+b.getLesson().getDateTime()+ "\tCapacity: "+b.getLesson().getCapacity());
+            }
+
     }
     
     
