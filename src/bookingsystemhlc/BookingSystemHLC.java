@@ -4,86 +4,130 @@
  * and open the template in the editor.
  */
 package bookingsystemhlc;
+import java.awt.*;
+import java.awt.event.*;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import javax.swing.*;
 /**
  *
  * @author abdul
  */
-public class BookingSystemHLC {
+public class BookingSystemHLC extends JFrame{
 
-    /**
-     * @param args the command line arguments
-     */
+     public BookingSystemHLC () {
+        super("BookingSystemHLC"); 
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                  
+        setLayout (new BorderLayout ());  
+        
+       JButton button = new JButton("Click me!");                       
+       JButton button2 = new JButton("Click me222!"); 
+       
+       button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(e);
+                
+//                JOptionPane.showMessageDialog (null,
+//                "There was an error in your program",
+//                "Program error",
+//                JOptionPane.ERROR_MESSAGE);
+                
+            }
+        });
+       
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(1, 1));  
+        
+        JEditorPane pane = new JEditorPane ();        
+        
+        centerPanel.add(pane);
+
+        
+//        add(button, BorderLayout.CENTER);             
+//        add(button2, BorderLayout.CENTER);   
+        add(centerPanel, BorderLayout.CENTER);
+
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        setSize(1500, 1000);
+    }
+     
     public static void main(String[] args) {
         
-        ArrayList<Coach> coachesAL = generateCoachData();
-        ArrayList <Student> studentsAL = generateStudentData();
-        ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
-        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
-        
-        System.out.println("Data Loaded");
-        Scanner input = new Scanner(System.in); 
-        
-        System.out.println("Enter Student Name: ");
-//        String studentName = input.nextLine();        
-        String studentName = "Reeta"; 
-        
-        System.out.println("Enter Coach Name: ");
-//        String coachName = input.nextLine();
-        String coachName = "Rick Grimes";
-         
-        System.out.println("Enter Expertise: ");
-//        String lessonName = input.nextLine();
-        String lessonName = "Swimming";
-        
-        
-        
-////////////        Coach Search & Get Lessons        ///////////////
-System.out.println("--------------------------------------------------------------");
-        Coach chosenCoach=null;
-        ArrayList <Lessons> coachLessonsAL = new ArrayList<Lessons>();
-        for(Coach c : coachesAL){            
-            if(c.getFullName().toLowerCase().equals(coachName.toLowerCase())){
-                System.out.println(c.getId()+"\t"+c.getFullName()+ "\t"+c.getExpertiseString()+"\t"+c.getOfficeHour());
-                chosenCoach = c;
-            }
-        }
-        
-        for(Lessons l:lessonsAL){
-            if(l.getCoach()==chosenCoach){
-                coachLessonsAL.add(l);
-                 System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
-            }
-        }
-        
-        
-        
-        
-        
-        
-///////////        Expertise Search & Get Lessons        ////////////////
-System.out.println("--------------------------------------------------------------");
-        for(Lessons l : lessonsAL){
-            if(l.getName().toLowerCase().contains(lessonName.toLowerCase())){
-                System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
-            }
-        }
-        
-        
-        
-System.out.println("--------------------------------------------------------------");
-        for (Bookings b : bookingsAL){
-                System.out.println("BookingID: "+b.getId() + "\tLessonName: " + b.getLesson().getName() +" - "+b.getLesson().getId()+ 
-                                                        "\tCoachName: " +b.getLesson().getCoach().getFullName() + "\tStudentName: "+
-                                                            b.getStudent().getFullName() +"\tDateTime"+b.getLesson().getDateTime()+ "\tCapacity: "+b.getLesson().getCapacity());
-            }
+           BookingSystemHLC app = new BookingSystemHLC();
+           app.setVisible(true);
+            
+//        ArrayList<Coach> coachesAL = generateCoachData();
+//        ArrayList <Student> studentsAL = generateStudentData();
+//        ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
+//        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
+//        
+//        System.out.println("Data Loaded");
+//        Scanner input = new Scanner(System.in); 
+//        
+//        System.out.println("Enter Student Name: ");
+////        String studentName = input.nextLine();        
+//        String studentName = "Reeta"; 
+//        
+//        System.out.println("Enter Coach Name: ");
+////        String coachName = input.nextLine();
+//        String coachName = "Rick Grimes";
+//         
+//        System.out.println("Enter Expertise: ");
+////        String lessonName = input.nextLine();
+//        String lessonName = "Swimming";
+//        
+//        
+//        
+//////////////        Coach Search & Get Lessons        ///////////////
+//System.out.println("--------------------------------------------------------------");
+//        Coach chosenCoach=null;
+//        ArrayList <Lessons> coachLessonsAL = new ArrayList<Lessons>();
+//        for(Coach c : coachesAL){            
+//            if(c.getFullName().toLowerCase().equals(coachName.toLowerCase())){
+//                System.out.println(c.getId()+"\t"+c.getFullName()+ "\t"+c.getExpertiseString()+"\t"+c.getOfficeHour());
+//                chosenCoach = c;
+//            }
+//        }
+//        
+//        for(Lessons l:lessonsAL){
+//            if(l.getCoach()==chosenCoach){
+//                coachLessonsAL.add(l);
+//                 System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
+//            }
+//        }
+//        
+//        
+//        
+//        
+//        
+//        
+/////////////        Expertise Search & Get Lessons        ////////////////
+//System.out.println("--------------------------------------------------------------");
+//        for(Lessons l : lessonsAL){
+//            if(l.getName().toLowerCase().contains(lessonName.toLowerCase())){
+//                System.out.println(l.getId() + "\t"+l.getName() +"\t"+l.getCoach().getFullName()+ "\t"+l.getDateTime()+ "\t"+l.getPlace()+"\t"+l.getCapacity());
+//            }
+//        }
+//        
+//        
+//        
+//System.out.println("--------------------------------------------------------------");
+//        for (Bookings b : bookingsAL){
+//                System.out.println("BookingID: "+b.getId() + "\tLessonName: " + b.getLesson().getName() +" - "+b.getLesson().getId()+ 
+//                                                        "\tCoachName: " +b.getLesson().getCoach().getFullName() + "\tStudentName: "+
+//                                                            b.getStudent().getFullName() +"\tDateTime"+b.getLesson().getDateTime()+ "\tCapacity: "+b.getLesson().getCapacity());
+//            }
+//        
 
     }
+    
+   
     
     
     
