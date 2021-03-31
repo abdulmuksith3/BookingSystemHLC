@@ -17,50 +17,50 @@ import javax.swing.*;
  *
  * @author abdul
  */
-public class BookingSystemHLC extends JFrame{
-
-     public BookingSystemHLC () {
-        super("BookingSystemHLC"); 
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                  
-        setLayout (new BorderLayout ());  
-        
-       JButton button = new JButton("Click me!");                       
-       JButton button2 = new JButton("Click me222!"); 
-       
-       button.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(e);
-                
-//                JOptionPane.showMessageDialog (null,
-//                "There was an error in your program",
-//                "Program error",
-//                JOptionPane.ERROR_MESSAGE);
-                
-            }
-        });
-       
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new GridLayout(1, 1));  
-        
-        JEditorPane pane = new JEditorPane ();        
-        
-        centerPanel.add(pane);
-
-        
-//        add(button, BorderLayout.CENTER);             
-//        add(button2, BorderLayout.CENTER);   
-        add(centerPanel, BorderLayout.CENTER);
-
-//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-        setSize(1500, 1000);
-    }
+public class BookingSystemHLC{
+//public class BookingSystemHLC extends JFrame{
+//     public BookingSystemHLC () {
+//        super("BookingSystemHLC"); 
+//
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);                  
+//        setLayout (new BorderLayout ());  
+//        
+//       JButton button = new JButton("Click me!");                       
+//       JButton button2 = new JButton("Click me222!"); 
+//       
+//       button.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                System.out.println(e);
+//                
+////                JOptionPane.showMessageDialog (null,
+////                "There was an error in your program",
+////                "Program error",
+////                JOptionPane.ERROR_MESSAGE);
+//                
+//            }
+//        });
+//       
+//        JPanel centerPanel = new JPanel();
+//        centerPanel.setLayout(new GridLayout(1, 1));  
+//        
+//        JEditorPane pane = new JEditorPane ();        
+//        
+//        centerPanel.add(pane);
+//
+//        
+////        add(button, BorderLayout.CENTER);             
+////        add(button2, BorderLayout.CENTER);   
+//        add(centerPanel, BorderLayout.CENTER);
+//
+////        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//
+//        setSize(1500, 1000);
+//    }
      
     public static void main(String[] args) {
-        
-           BookingSystemHLC app = new BookingSystemHLC();
-           app.setVisible(true);
+        RegistrationFrame frame1 = new RegistrationFrame();
+//           BookingSystemHLC app = new BookingSystemHLC();
+//           app.setVisible(true);
             
 //        ArrayList<Coach> coachesAL = generateCoachData();
 //        ArrayList <Student> studentsAL = generateStudentData();
