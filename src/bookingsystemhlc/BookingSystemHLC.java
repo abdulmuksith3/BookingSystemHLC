@@ -57,15 +57,16 @@ public class BookingSystemHLC{
 //        setSize(1500, 1000);
 //    }
      
-    public static void main(String[] args) {
-        RegistrationFrame frame1 = new RegistrationFrame();
+    public static void main(String[] args) {        
 //           BookingSystemHLC app = new BookingSystemHLC();
 //           app.setVisible(true);
             
-//        ArrayList<Coach> coachesAL = generateCoachData();
-//        ArrayList <Student> studentsAL = generateStudentData();
-//        ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
-//        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
+        ArrayList<Coach> coachesAL = generateCoachData();
+        ArrayList <Student> studentsAL = generateStudentData();
+        ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
+        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
+        
+        MainFrame frame = new MainFrame(coachesAL, studentsAL, bookingsAL);
 //        
 //        System.out.println("Data Loaded");
 //        Scanner input = new Scanner(System.in); 

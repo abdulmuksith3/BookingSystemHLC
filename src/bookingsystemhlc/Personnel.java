@@ -31,10 +31,10 @@ public class Personnel {
     public String getFullName(){
         return this.fullName;
     };
-    public String address(){
+    public String getAddress(){
         return this.address;
     };
-    public String telephoneNo(){
+    public String getTelephoneNo(){
         return this.telephoneNo;
     };
     
