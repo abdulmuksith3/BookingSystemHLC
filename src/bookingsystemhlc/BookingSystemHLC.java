@@ -66,7 +66,9 @@ public class BookingSystemHLC{
         ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
         ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
         
-        MainFrame frame = new MainFrame(coachesAL, studentsAL, bookingsAL);
+//        MainFrame frame = new MainFrame(coachesAL, studentsAL, bookingsAL);
+        GraphicsFrame frame = new GraphicsFrame(coachesAL, studentsAL, bookingsAL);
+
 //        
 //        System.out.println("Data Loaded");
 //        Scanner input = new Scanner(System.in); 
