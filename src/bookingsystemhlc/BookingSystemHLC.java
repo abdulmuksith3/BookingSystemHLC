@@ -247,6 +247,9 @@ public class BookingSystemHLC{
         Student student15 = new Student("Leon Pettit","Ridgeview Point","+44 7700 900150");
         studentAL.add(student15);
         
+        Student student16 = new Student("Abdul","Ridgeview Point","+44 7700 3701380");
+        studentAL.add(student16);
+        
         return studentAL;
     }
     
