@@ -44,9 +44,7 @@ public class GraphicsFrame extends JFrame implements ActionListener{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        setLayout (new BoxLayout(getContentPane (), BoxLayout.Y_AXIS));
 //        setLayout(new BorderLayout());
-        setResizable(false);
-        setSize(1000, 750);
-        setVisible(true);
+        
         
         c = getContentPane();
         
@@ -63,7 +61,9 @@ public class GraphicsFrame extends JFrame implements ActionListener{
 //        }
         
 
-        
+        setResizable(true);
+        setSize(900, 650);
+        setVisible(true);
     }
     
     public void generateMainPanel(){
@@ -141,6 +141,7 @@ public class GraphicsFrame extends JFrame implements ActionListener{
                         System.out.println("Logged in: " + s.getFullName());
                     } else {
                         System.out.println("New Student");
+                        break;
                     }
                 }
                 
