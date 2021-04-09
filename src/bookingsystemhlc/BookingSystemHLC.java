@@ -186,7 +186,7 @@ public class BookingSystemHLC{
         Coach coach5 = new Coach("Maggie Greene", "Worcester", "+44 7700 900150",new String[]{"Tennis"}, "Friday, 18:00-19:00");
         coachList.add(coach5);
         
-        Coach coach6 = new Coach("Michonne ", "Hereford", "+44 7700 900160",new String[]{"Swimming", "Gymnastics"}, "Friday, 17:00-18:00");
+        Coach coach6 = new Coach("Michonne", "Hereford", "+44 7700 900160",new String[]{"Swimming", "Gymnastics"}, "Friday, 17:00-18:00");
         coachList.add(coach6);
         
         Coach coach7 = new Coach("Rosita Espinosa", "Worcester", "+44 7700 900170",new String[]{"Fencing"}, "Thursday, 16:00-17:00");
@@ -247,7 +247,7 @@ public class BookingSystemHLC{
         Student student15 = new Student("Leon Pettit","Ridgeview Point","+44 7700 900150");
         studentAL.add(student15);
         
-        Student student16 = new Student("Abdul","Ridgeview Point","+44 7700 3701380");
+        Student student16 = new Student("a","Ridgeview Point","+44 7700 3701380");
         studentAL.add(student16);
         
         return studentAL;
@@ -259,68 +259,88 @@ public class BookingSystemHLC{
         ArrayList<Lessons> lessonsAL = new ArrayList<Lessons>();       
 
 
-        Lessons lesson1 = new Lessons("Swimming", "Swimming Pool", "2021-03-01T15:00:00", coachesAL.get(0), 3);
+        Lessons lesson1 = new Lessons("Swimming", "Swimming Pool", "2021-03-01 15:00:00", coachesAL.get(0), 3);
         lessonsAL.add(lesson1);
         
-        Lessons lesson2 = new Lessons("Badminton", "Badminton Court", "2021-03-02T15:00:00", coachesAL.get(0), 3);
+        Lessons lesson2 = new Lessons("Badminton", "Badminton Court", "2021-03-02 15:00:00", coachesAL.get(0), 3);
         lessonsAL.add(lesson2);
         
-        Lessons lesson3 = new Lessons("Badminton", "Badminton Court", "2021-03-04T16:00:00", coachesAL.get(0), 3);
+        Lessons lesson3 = new Lessons("Badminton", "Badminton Court", "2021-03-04 16:00:00", coachesAL.get(0), 3);
         lessonsAL.add(lesson3);
         
-        Lessons lesson4 = new Lessons("Gymnastics", "Gym", "2021-03-01T16:00:00", coachesAL.get(1), 3);
+        Lessons lesson4 = new Lessons("Gymnastics", "Gym", "2021-03-01 16:00:00", coachesAL.get(1), 3);
         lessonsAL.add(lesson4);
         
-        Lessons lesson5 = new Lessons("Gymnastics", "Gym", "2021-03-04T15:00:00", coachesAL.get(1), 3);
+        Lessons lesson5 = new Lessons("Gymnastics", "Gym", "2021-03-04 15:00:00", coachesAL.get(1), 3);
         lessonsAL.add(lesson5);
         
-        Lessons lesson6 = new Lessons("Tennis", "Tennis Court", "2021-03-04T17:00:00", coachesAL.get(1), 3);
+        Lessons lesson6 = new Lessons("Tennis", "Tennis Court", "2021-03-04 17:00:00", coachesAL.get(1), 3);
         lessonsAL.add(lesson6);
         
-        Lessons lesson7 = new Lessons("Football", "Football Field", "2021-03-01T18:00:00", coachesAL.get(2), 3);
+        Lessons lesson7 = new Lessons("Football", "Football Field", "2021-03-01 18:00:00", coachesAL.get(2), 3);
         lessonsAL.add(lesson7);
         
-        Lessons lesson8 = new Lessons("Cricket", "Cricket Field", "2021-03-03T15:00:00", coachesAL.get(2), 3);
+        Lessons lesson8 = new Lessons("Cricket", "Cricket Field", "2021-03-03 15:00:00", coachesAL.get(2), 3);
         lessonsAL.add(lesson8);
         
-        Lessons lesson9 = new Lessons("Football", "Football Field", "2021-03-05T17:00:00", coachesAL.get(2), 3);
+        Lessons lesson9 = new Lessons("Football", "Football Field", "2021-03-05 17:00:00", coachesAL.get(2), 3);
         lessonsAL.add(lesson9);
         
-        Lessons lesson10 = new Lessons("Archery", "Archery Arena", "2021-03-01T17:00:00", coachesAL.get(3), 3);
+        Lessons lesson10 = new Lessons("Archery", "Archery Arena", "2021-03-01 17:00:00", coachesAL.get(3), 3);
         lessonsAL.add(lesson10);
         
-        Lessons lesson11 = new Lessons("Archery", "Archery Arena", "2021-03-03T16:00:00", coachesAL.get(3), 3);
+        Lessons lesson11 = new Lessons("Archery", "Archery Arena", "2021-03-03 16:00:00", coachesAL.get(3), 3);
         lessonsAL.add(lesson11);
         
-        Lessons lesson12 = new Lessons("Archery", "Archery Arena", "2021-03-04T17:00:00", coachesAL.get(3), 3);
+        Lessons lesson12 = new Lessons("Archery", "Archery Arena", "2021-03-04 17:00:00", coachesAL.get(3), 3);
         lessonsAL.add(lesson12);
         
-        Lessons lesson13 = new Lessons("Tennis", "Tennis Court", "2021-03-01T17:00:00", coachesAL.get(4), 3);
+        Lessons lesson13 = new Lessons("Tennis", "Tennis Court", "2021-03-01 17:00:00", coachesAL.get(4), 3);
         lessonsAL.add(lesson13);
         
-        Lessons lesson14 = new Lessons("Tennis", "Tennis Court", "2021-03-02T16:00:00", coachesAL.get(4), 3);
+        Lessons lesson14 = new Lessons("Tennis", "Tennis Court", "2021-03-02 16:00:00", coachesAL.get(4), 3);
         lessonsAL.add(lesson14);
         
-        Lessons lesson15 = new Lessons("Tennis", "Tennis Court", "2021-03-05T16:00:00", coachesAL.get(4), 3);
+        Lessons lesson15 = new Lessons("Tennis", "Tennis Court", "2021-03-05 16:00:00", coachesAL.get(4), 3);
         lessonsAL.add(lesson15);
         
-        Lessons lesson16 = new Lessons("Gymnastics", "Gym", "2021-03-02T17:00:00", coachesAL.get(5), 3);
+        Lessons lesson16 = new Lessons("Gymnastics", "Gym", "2021-03-02 17:00:00", coachesAL.get(5), 3);
         lessonsAL.add(lesson16);
         
-        Lessons lesson17 = new Lessons("Swimming", "Swimming Pool", "2021-03-03T17:00:00", coachesAL.get(5), 3);
+        Lessons lesson17 = new Lessons("Swimming", "Swimming Pool", "2021-03-03 17:00:00", coachesAL.get(5), 3);
         lessonsAL.add(lesson17);
         
-        Lessons lesson18 = new Lessons("Swimming", "Swimming Pool", "2021-03-05T15:00:00", coachesAL.get(5), 3);
+        Lessons lesson18 = new Lessons("Swimming", "Swimming Pool", "2021-03-05 15:00:00", coachesAL.get(5), 3);
         lessonsAL.add(lesson18);
         
-        Lessons lesson19 = new Lessons("Fencing", "Fencing Piste", "2021-03-02T16:00:00", coachesAL.get(6), 3);
+        Lessons lesson19 = new Lessons("Fencing", "Fencing Piste", "2021-03-02 16:00:00", coachesAL.get(6), 3);
         lessonsAL.add(lesson19);
         
-        Lessons lesson20 = new Lessons("Fencing", "Fencing Piste", "2021-03-03T18:00:00", coachesAL.get(6), 3);
+        Lessons lesson20 = new Lessons("Fencing", "Fencing Piste", "2021-03-03 18:00:00", coachesAL.get(6), 3);
         lessonsAL.add(lesson20);
         
-        Lessons lesson21 = new Lessons("Fencing", "Fencing Piste", "2021-03-04T18:00:00", coachesAL.get(6), 3);
+        Lessons lesson21 = new Lessons("Fencing", "Fencing Piste", "2021-03-04 18:00:00", coachesAL.get(6), 3);
         lessonsAL.add(lesson21);
+        
+        /////////////////TESTING DATA/////////////
+//        
+//        Lessons lesson111 = new Lessons("Gymnastics", "Gym", "2021-03-02T17:00:00", coachesAL.get(5), 3);
+//        lessonsAL.add(lesson111);
+//        
+//        Lessons lesson1112 = new Lessons("Swimming", "Swimming Pool", "2021-03-03T17:00:00", coachesAL.get(5), 3);
+//        lessonsAL.add(lesson1112);
+//        
+//        Lessons lesson1113 = new Lessons("Swimming", "Swimming Pool", "2021-03-05T15:00:00", coachesAL.get(5), 3);
+//        lessonsAL.add(lesson1113);
+//        
+//        Lessons lesson1114 = new Lessons("Fencing", "Fencing Piste", "2021-03-02T16:00:00", coachesAL.get(6), 3);
+//        lessonsAL.add(lesson1114);
+//        
+//        Lessons lesson1115 = new Lessons("Fencing", "Fencing Piste", "2021-03-03T18:00:00", coachesAL.get(6), 3);
+//        lessonsAL.add(lesson1115);
+//        
+//        Lessons lesson1116 = new Lessons("Fencing", "Fencing Piste", "2021-03-04T18:00:00", coachesAL.get(6), 3);
+//        lessonsAL.add(lesson1116);
         
         
         return lessonsAL;

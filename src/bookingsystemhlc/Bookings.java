@@ -69,5 +69,9 @@ public class Bookings {
         return slot;
     }
     
+    public String getStatus(){
+        return status;
+    }
+    
     
 }
