@@ -43,10 +43,17 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JScrollPane scrollPanel;
     private JTable lessonsTable;
     String[][] tableData;
-    String[] columnNames = {"Lesson ID", "Expertise", "Coach", "Date&Time", "Location", "Capacity", "Book"};    
+    String[] columnNames = {"Lesson ID", "Expertise", "Coach", "Date&Time", "Location", "Capacity", "Book"};
     private JButton myBookingsButton;
-    
+
     private JButton studentPanelButton;
+    
+    private String parentName;
+    private JTextField parentSearchField;
+    private JButton parentSearchButton;
+    private JButton parentBookingButton;
+    private JTable coachesTable;
+    
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
         super("Booking System HLC");
@@ -55,7 +62,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         this.lessonsAL = lessonsAL;
         this.bookingsAL = bookingsAL;
         this.lessonsAL2 = lessonsAL;
-        this.tableData =  new String[lessonsAL2.size()][];
+        this.tableData = new String[lessonsAL2.size()][];
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        setLayout (new BoxLayout(getContentPane (), BoxLayout.Y_AXIS));
@@ -183,27 +190,25 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //              lessonsTable.setValueAt("Click here to Book", k, 6);
 //            }            
 //        }
-        
         int counter = 0;
         for (Lessons l : lessonsAL2) {
             String bookingButton = "Click Here to Book";
             if (l.getCapacity() == 0) {
                 bookingButton = "Lesson Full";
-            } 
-                if (!studentBookings.isEmpty()) {
-                    for (Bookings b : studentBookings) {            
-                        if(b.getStatus().equals("Cancelled")){
-                            System.out.println("Cancelled Booking");
-                        }
-                        else if(b.getLesson().getId() == l.getId()){
-                            bookingButton = "Booked";
-                        } else if (b.getLesson().getDateTime().equals(l.getDateTime())){
-                            bookingButton = "Time Conflict";
-                        } 
-
+            }
+            if (!studentBookings.isEmpty()) {
+                for (Bookings b : studentBookings) {
+                    if (b.getStatus().equals("Cancelled")) {
+                        System.out.println("Cancelled Booking");
+                    } else if (b.getLesson().getId() == l.getId()) {
+                        bookingButton = "Booked";
+                    } else if (b.getLesson().getDateTime().equals(l.getDateTime())) {
+                        bookingButton = "Time Conflict";
                     }
+
                 }
-            
+            }
+
             String[] tempData = {l.getId() + "", l.getName(), l.getCoach().getFullName(), getDateTimeString(l.getDateTime()), l.getPlace(), l.getCapacity() + "", bookingButton};
             tableData[counter] = tempData;
             counter++;
@@ -214,10 +219,12 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //        lessonsTable.setRowHeight(0, 50);
         lessonsTable.setRowSelectionAllowed(false);
         lessonsTable.setColumnSelectionAllowed(false);
-        System.out.println(lessonsTable.getCellSelectionEnabled());
+//        System.out.println(lessonsTable.getCellSelectionEnabled());
         lessonsTable.setCellSelectionEnabled(true);
+        lessonsTable.getTableHeader().setReorderingAllowed(false);
+        lessonsTable.getColumnModel().getColumn(3).setPreferredWidth(120);
 //        System.out.println(lessonsTable.getSelectedColumn());
-        System.out.println(lessonsTable.getCellSelectionEnabled());
+//        System.out.println(lessonsTable.getCellSelectionEnabled());
         lessonsTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -290,10 +297,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //            System.out.println(searchTypeDropdown.getSelectedItem());
             studentSearch();
         }
-        if(e.getSource() == myBookingsButton){
+        if (e.getSource() == myBookingsButton) {
             generateMyBookings();
         }
-        if(e.getSource() == studentPanelButton){
+        if (e.getSource() == studentPanelButton) {
 //            System.out.println("studentPanel-------");
             bookingPanel.setVisible(false);
             generateStudentPanel();
@@ -357,6 +364,59 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     }
 
     public void parentLogin() {
+        parentPanel = new JPanel(new BorderLayout());
+        parentName = loginStudentNameField.getText();
+        
+        JLabel titleLabel = new JLabel("Welcome " + parentName+"!");  
+        titleLabel.setPreferredSize(new Dimension(500,100));
+        
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(titleLabel);
+                
+        JPanel midPanel = new JPanel(new BorderLayout());
+        JPanel midPanelTop = new JPanel(new FlowLayout());
+        midPanelTop.setPreferredSize(new Dimension(700,100));
+        parentSearchField = new JTextField();
+        parentSearchField.setPreferredSize(new Dimension(700,50));        
+        parentSearchButton = new JButton("Search");
+        parentSearchButton.setPreferredSize(new Dimension(150,50));
+        
+        midPanelTop.add(parentSearchField);
+        midPanelTop.add(parentSearchButton);
+        
+        String[] columnNames = {"ID", "Name", "Phone", "Expertise", "Office Hours", "Book"};
+        String[][] tableData = new String[coachesAL.size()][];
+        int counter = 0;
+        
+        for(Coach c : coachesAL){
+            String[] coach = {c.getId()+"", c.getFullName(), c.getTelephoneNo(), c.getExpertiseString(), c.getOfficeHour(), "Book"};
+            tableData[counter] = coach;
+            counter++;
+        }        
+        
+        coachesTable = new JTable(tableData, columnNames);
+        
+        
+        JScrollPane scrollPane = new JScrollPane(coachesTable);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+                scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        
+        midPanel.add(midPanelTop, BorderLayout.NORTH);
+        midPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        
+        JPanel emptyWest = new JPanel();
+        JPanel emptyEast = new JPanel();
+        JPanel emptySouth = new JPanel();
+        parentPanel.add(topPanel, BorderLayout.NORTH);
+        parentPanel.add(midPanel, BorderLayout.CENTER);
+        parentPanel.add(emptyWest, BorderLayout.WEST);
+        parentPanel.add(emptyEast, BorderLayout.EAST);
+        parentPanel.add(emptySouth, BorderLayout.SOUTH);
+        
+        mainPanel.setVisible(false);
+        add(parentPanel);       
 
     }
 
@@ -386,7 +446,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         }
 
         lessonsAL2 = tempAL;
-        
+
         studentPanel.setVisible(false);
         generateStudentPanel();
 
@@ -431,14 +491,14 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //            System.out.println("RES " + res);
             if (res == JOptionPane.YES_OPTION) {
 //                System.out.println("YES CHOSEN-BOOKED");
-                if(selectedLesson.getCapacity() > 0) {
-                    lessonsAL.get(lessonsAL.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity()-1);
+                if (selectedLesson.getCapacity() > 0) {
+                    lessonsAL.get(lessonsAL.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity() - 1);
 //                    lessonsAL2.get(lessonsAL2.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity()-1);
                     Bookings newBooking = new Bookings(student, selectedLesson, "Booked");
                     bookingsAL.add(newBooking);
                     studentBookings.add(newBooking);
                 }
-                
+
                 studentPanel.setVisible(false);
                 generateStudentPanel();
             }
@@ -447,68 +507,206 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(studentPanel, "Sorry, the lesson is fully booked.", "Alert", JOptionPane.WARNING_MESSAGE);
         } else if (selectedValue.equals("Time Conflict")) {
             JOptionPane.showMessageDialog(studentPanel, "Sorry, the lesson you're trying to book conflicts with the timing of another lesson.", "Alert", JOptionPane.WARNING_MESSAGE);
-        } else if (selectedValue.equals("Booked")){
+        } else if (selectedValue.equals("Booked")) {
             generateMyBookings();
         }
 
     }
-    
-    public void generateMyBookings(){
+
+    public void generateMyBookings() {
         System.out.println("MyBookings Panel");
         bookingPanel = new JPanel(new BorderLayout());
-        
+
         JLabel titleLabel = new JLabel("My Bookings");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 25));
 //        titleLabel.setPreferredSize(new);
 
         studentPanelButton = new JButton("Search Lessons");
         studentPanelButton.addActionListener(this);
-        
+
         JPanel topPanel = new JPanel(new FlowLayout());
-        topPanel.setPreferredSize(new Dimension(500, 100));
+        topPanel.setPreferredSize(new Dimension(500, 70));
         topPanel.add(titleLabel);
         topPanel.add(studentPanelButton);
-        
-                
+
         bookingPanel.add(topPanel, BorderLayout.NORTH);
-        
+
         JPanel midPanel = new JPanel();
-        midPanel.setPreferredSize(new Dimension(700,500));
+        midPanel.setPreferredSize(new Dimension(700, 500));
 //        midPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        
+
 //        JLabel label = new JLabel("Test");
 //        midPanel.add(label,4,2);
-
-        JTable timeTable = new JTable(5,6);
+        int columnLength = 6;
+        int rowLength = 5;
+        JTable timeTable = new JTable(rowLength, columnLength);
         timeTable.setRowHeight(100);
+        for (int i = 0; i < columnLength; i++) {
+            timeTable.getColumnModel().getColumn(i).setPreferredWidth(125);
+        }
+//        Enum< timeTable.getColumnModel().getColumns();
+//        timeTable.setMinimumSize(new Dimension(700,500));
+        timeTable.setRowSelectionAllowed(false);
+        timeTable.setColumnSelectionAllowed(false);
+        timeTable.setCellSelectionEnabled(true);
+//        timeTable.setAlignmentX(SwingConstants.CENTER);
+//        timeTable.setAlignmentY(SwingConstants.CENTER);
+//timeTable.setHorizontalAlignment(SwingConstants.CENTER);
         
+
+        //Coulmn Titles
+        String[] columnTitles = {"Time","Mon", "Tue", "Wed", "Thu", "Fri"};
+        for (int i = 0; i < columnTitles.length; i++) {
+            timeTable.setValueAt(columnTitles[i], 0, i);
+        }
+        
+        //Row Titles
+        String[] rowTitles = {"Time","15:00", "16:00", "17:00", "18.00"};
+        for (int i = 0; i < rowTitles.length; i++) {
+            timeTable.setValueAt(rowTitles[i], i, 0);            
+        }
+        
+        for(Bookings b : studentBookings) {
+            Lessons l = b.getLesson();
+            String value = "(ID " + b.getId() + ") " + l.getName();
+            String day = getDayString(l.getDateTime());
+            String time = getTimeString(l.getDateTime());
+            String date = getDateString(l.getDateTime());
+            int tableRow = getRow(time);
+            
+//            timeTable.setValueAt(, NORMAL);
+            switch(day){
+                case "Mon":                    
+                    timeTable.setValueAt(value, tableRow, 1);
+//                    timeTable.getColumnModel().getColumn(1).setCellRenderer();
+                    break;
+                case "Tue":
+                    timeTable.setValueAt(value, tableRow, 2);
+                    break;
+                case "Wed":
+                    timeTable.setValueAt(value, tableRow, 3);
+                    break;
+                case "Thu":
+                    timeTable.setValueAt(value, tableRow, 4);
+                    break;
+                case "Fri":
+                    timeTable.setValueAt(value, tableRow, 5);
+                    break;
+            }            
+        }
+        
+        timeTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                   int row = timeTable.getSelectedRow();
+                   int column = timeTable.getSelectedColumn();
+//                   String selectedValue = timeTable.getValueAt(row, column).toString();
+                   
+                   
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        });
+
         midPanel.add(timeTable);
-        
+
         bookingPanel.add(midPanel, BorderLayout.CENTER);
-        
-        
+
         JPanel emptyWest = new JPanel();
-        JPanel emptyEast = new JPanel();        
+        JPanel emptyEast = new JPanel();
         JPanel emptySouth = new JPanel();
         bookingPanel.add(emptyEast, BorderLayout.EAST);
         bookingPanel.add(emptyWest, BorderLayout.WEST);
         bookingPanel.add(emptySouth, BorderLayout.SOUTH);
-        
+
         studentPanel.setVisible(false);
         add(bookingPanel);
     }
-    
+
     public String getDateTimeString(String dateTime) {
-        String res="";
-        
-       
+        String res = "";
+
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, yyyy-MM-dd HH:mm");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+        System.out.println(res);
+
+        return res;
+    }
+    
+    public String getDayString(String dateTime) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+        System.out.println(res);
+
+        return res;
+    }
+    
+    public String getTimeString(String dateTime) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+        System.out.println(res);
+
+        return res;
+    }
+    
+     public String getDateString(String dateTime) {
+        String res = "";
+        
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
         System.out.println(res);
         
         return res;
     }
+     
+     public int getRow(String time){
+        int res = 1;
+         
+        if(time.equals("16:00")) {
+            res = 2;
+        }
+        else if(time.equals("17:00")){
+            res = 3;
+        }
+        else if(time.equals("18:00")){
+            res = 4;
+        }
+        else if(time.equals("19:00")){
+            res = 5;
+        }
+        
+        return res;         
+     }
 
 }
