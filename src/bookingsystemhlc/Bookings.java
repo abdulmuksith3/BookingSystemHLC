@@ -19,6 +19,7 @@ public class Bookings {
     private String note;
     private int slot;
     private String status;
+    private String dateTime;
     
     private String bookingType;
     
@@ -32,13 +33,14 @@ public class Bookings {
         this.status = status;
     }
     
-     public Bookings (Coach coach, String note, int slot, String status){
+     public Bookings (Coach coach, String note, int slot, String status, String dateTime){
         this.id = bookingCounter++;
         this.coach = coach;
         this.note = note;
         this.slot = slot;
         this.bookingType = "Appointment";
         this.status = status;
+        this.dateTime = dateTime;
     }
     
     public int getId(){
@@ -71,6 +73,10 @@ public class Bookings {
     
     public String getStatus(){
         return status;
+    }
+    
+    public String getBookingDateTime() {
+        return dateTime;
     }
     
     

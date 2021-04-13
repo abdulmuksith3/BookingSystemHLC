@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
@@ -400,7 +401,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         int counter = 0;
 
         for (Coach c : coachesAL2) {
-            String[] coach = {c.getId() + "", c.getFullName(), c.getTelephoneNo(), c.getExpertiseString(), c.getOfficeHour(), "Click Here to Book"};
+            String[] coach = {c.getId() + "", c.getFullName(), c.getTelephoneNo(), c.getExpertiseString(), getOfficeHourShortString(c.getOfficeHour()), "Click Here to Book"};
             tableData[counter] = coach;
             counter++;
         }
@@ -495,18 +496,71 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         JPanel emptySouth = new JPanel();
 
         JLabel titleLabel = new JLabel("Coach Name: " + selectedCoach.getFullName());
-        JLabel subTitleLabel = new JLabel("Office Hour Timing: " + selectedCoach.getOfficeHour());
+        titleLabel.setPreferredSize(new Dimension(400, 50));
+        JLabel subTitleLabel = new JLabel("Office Hour Timing: " + getOfficeHourShortString(selectedCoach.getOfficeHour()));
+        subTitleLabel.setPreferredSize(new Dimension(400, 100));
 
         topPanel.add(titleLabel, BorderLayout.NORTH);
         topPanel.add(subTitleLabel, BorderLayout.CENTER);
-        
-        JTable appointmentTable = new JTable(10,3);
+
+        String[] columnNames = {"Date", "Time", "Book Slot"};
+        String[][] tableData = new String[12][];
+//        ArrayList<String[]> data = new ArrayList<String[]>();
+        ArrayList<Bookings> selectedCoachAppointmentsAL = new ArrayList<Bookings>();
+        int counter = 0;
+        if (selectedCoach != null) {
+//            for(Bookings b : bookingsAL) {
+////                b.getCoach().getId() == selectedCoach.getId();
+////                b.getBookingType().equals("Appointment");
+////                b.getSlot();
+////                b.getBookingDateTime();
+//                    if((b.getCoach().getId()==selectedCoach.getId()) && b.getBookingType().equals("Appointment") && b.getStatus().equals("Booked")) {
+//                        selectedCoachAppointmentsAL.add(b);
+//                    }
+//
+//            }
+//                String tempDate = getDateTimeShortString(c.getOfficeHour());
+//                String oneHour = addHour(c.getOfficeHour());
+//                String res = tempDate.concat(" - "+oneHour);
+//                System.out.println("res" + res);
+//            String officeHour = getOfficeHourShortString(selectedCoach.getOfficeHour());
+            
+            for (int i = 0; i < 4; i++) {
+                System.out.println("Week " + (i + 1));
+                // Slot 1
+                
+                String[] tempData1 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 1), "Click Here to Book"};
+                
+                //Slot 2
+                String[] tempData2 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 2), "Click Here to Book"};
+                
+                //Slot 3
+                String[] tempData3 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 3), "Click Here to Book"};
+                
+                
+                tableData[counter] = tempData1;
+                tableData[counter + 1] = tempData2;
+                tableData[counter + 2] = tempData3;
+                counter += 3;
+//                data.add(tempData1);
+//                data.add(tempData2);
+//                data.add(tempData3);
+            }
+
+        }
+
+        JTable appointmentTable = new JTable(tableData, columnNames);
+//        JTable appointmentTable = new JTable(5, 5);
+
+        JScrollPane scrollPane = new JScrollPane(appointmentTable);
+
+        midPanel.add(scrollPane, BorderLayout.CENTER);
 
         coachAppointmentPanel.add(topPanel, BorderLayout.NORTH);
         coachAppointmentPanel.add(midPanel, BorderLayout.CENTER);
         coachAppointmentPanel.add(emptyWest, BorderLayout.WEST);
         coachAppointmentPanel.add(emptyEast, BorderLayout.EAST);
-        coachAppointmentPanel.add(emptySouth, BorderLayout.SOUTH);       
+        coachAppointmentPanel.add(emptySouth, BorderLayout.SOUTH);
 
         parentPanel.setVisible(false);
         add(coachAppointmentPanel);
@@ -779,6 +833,47 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         return res;
     }
 
+    public String getDateTimeShortString(String dateTime) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, yyyy-MM-dd HH:mm");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+//        System.out.println(res);
+
+        return res;
+    }
+
+    public String addHour(String dateTime) {
+//        System.out.println("dateTime ----- " + dateTime);
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat).plusHours(1);
+        res = localDT.format(formatter);
+//        System.out.println(res);/
+
+        return res;
+    }
+
+    public String getOfficeHourString(String dateTime) {
+        //        System.out.println("dateTime ----- " + dateTime);
+        String res = getDateTimeShortString(dateTime) + " - " + addHour(dateTime);
+//        System.out.println("resssss " + res);
+
+        return res;
+    }
+
+    public String getOfficeHourShortString(String dateTime) {
+        //        System.out.println("dateTime ----- " + dateTime);
+        String res = getDayString(dateTime) + ", " + getTimeString(dateTime) + " - " + addHour(dateTime);
+//        System.out.println("resssss " + res);
+
+        return res;
+    }
+
     public int getRow(String time) {
         int res = 1;
 
@@ -791,6 +886,43 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         } else if (time.equals("19:00")) {
             res = 5;
         }
+
+        return res;
+    }
+
+    private String getOfficeHourDate(String dateTime, int i) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat).plusWeeks(i);
+        res = localDT.format(formatter);
+//        System.out.println(res + "-------------");
+        return res;
+    }
+
+    private String getOfficeTimeString(String dateTime, int i) {
+        String res = "";
+        LocalDateTime localDTStart = null, localDTEnd = null;
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+
+        switch (i) {
+            case 1:
+                localDTStart = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(0);
+                localDTEnd = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(20);
+                break;
+            case 2:
+                localDTStart = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(20);
+                localDTEnd = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(40);
+                break;
+            case 3:
+                localDTStart = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(40);
+                localDTEnd = LocalDateTime.parse(dateTime, dateFormat).plusMinutes(60);
+                break;
+        }
+
+        res = localDTStart.format(formatter) + " - " + localDTEnd.format(formatter);
 
         return res;
     }

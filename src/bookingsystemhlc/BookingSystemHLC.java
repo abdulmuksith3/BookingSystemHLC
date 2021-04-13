@@ -171,25 +171,25 @@ public class BookingSystemHLC{
         
         ArrayList <Coach> coachList = new ArrayList<Coach>();       
                 
-        Coach coach1 = new Coach("Rick Grimes", "Hereford", "+44 7700 900110",new String[]{"Swimming", "Badminton"}, "Monday, 16:00-17:00"); 
+        Coach coach1 = new Coach("Rick Grimes", "Hereford", "+44 7700 900110",new String[]{"Swimming", "Badminton"}, "2021-03-01 16:00:00"); 
         coachList.add(coach1);
         
-        Coach coach2 = new Coach("Glenn Rhee", "Wells", "+44 7700 900120",new String[]{"Gymnastics", "Tennis"}, "Tuesday, 17:00-18:00");
+        Coach coach2 = new Coach("Glenn Rhee", "Wells", "+44 7700 900120",new String[]{"Gymnastics", "Tennis"}, "2021-03-02 17:00:00");
         coachList.add(coach2);
         
-        Coach coach3 = new Coach("Negan ", "Southampton", "+44 7700 900130",new String[]{"Cricket", "Football"}, "Wednesday, 17:00-18:00");
+        Coach coach3 = new Coach("Negan ", "Southampton", "+44 7700 900130",new String[]{"Cricket", "Football"}, "2021-03-03 17:00:00");
         coachList.add(coach3);
         
-        Coach coach4 = new Coach("Daryl Dixon", "Cambridge", "+44 7700 900140",new String[]{"Archery"}, "Thursday, 15:00-16:00");
+        Coach coach4 = new Coach("Daryl Dixon", "Cambridge", "+44 7700 900140",new String[]{"Archery"}, "2021-03-04 15:00:00");
         coachList.add(coach4);
         
-        Coach coach5 = new Coach("Maggie Greene", "Worcester", "+44 7700 900150",new String[]{"Tennis"}, "Friday, 18:00-19:00");
+        Coach coach5 = new Coach("Maggie Greene", "Worcester", "+44 7700 900150",new String[]{"Tennis"}, "2021-03-05 18:00:00");
         coachList.add(coach5);
         
-        Coach coach6 = new Coach("Michonne", "Hereford", "+44 7700 900160",new String[]{"Swimming", "Gymnastics"}, "Friday, 17:00-18:00");
+        Coach coach6 = new Coach("Michonne", "Hereford", "+44 7700 900160",new String[]{"Swimming", "Gymnastics"}, "2021-03-05 17:00:00");
         coachList.add(coach6);
         
-        Coach coach7 = new Coach("Rosita Espinosa", "Worcester", "+44 7700 900170",new String[]{"Fencing"}, "Thursday, 16:00-17:00");
+        Coach coach7 = new Coach("Rosita Espinosa", "Worcester", "+44 7700 900170",new String[]{"Fencing"}, "2021-03-04 16:00:00");
         coachList.add(coach7);  
         
         return coachList;
