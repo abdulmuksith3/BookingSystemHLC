@@ -57,6 +57,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JButton parentSearchButton;
     private JButton parentBookingButton;
     private JTable coachesTable;
+    private JTable appointmentTable;
+    private Coach selectedCoach;
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
         super("Booking System HLC");
@@ -226,6 +228,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         lessonsTable.setColumnSelectionAllowed(false);
 //        System.out.println(lessonsTable.getCellSelectionEnabled());
         lessonsTable.setCellSelectionEnabled(true);
+//        lessonsTable.setEnabled(false);
         lessonsTable.getTableHeader().setReorderingAllowed(false);
         lessonsTable.getColumnModel().getColumn(3).setPreferredWidth(120);
         lessonsTable.getColumnModel().getColumn(6).setPreferredWidth(120);
@@ -355,10 +358,11 @@ public class GraphicsFrame extends JFrame implements ActionListener {
                 student = s;
 
                 for (Bookings b : bookingsAL) {
+                    if(b.getBookingType().equals("Lesson")){
                     if (b.getStudent().equals(s)) {
                         studentBookings.add(b);
 //                        System.out.println("My Booking " + b.getId() + " " + b.getLesson().getName() + " " + b.getLesson().getCoach().getFullName() + " " + b.getLesson().getDateTime());
-                    }
+                    }}
                 }
                 mainPanel.setVisible(false);
                 generateStudentPanel();
@@ -410,6 +414,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         coachesTable.setRowSelectionAllowed(false);
         coachesTable.setColumnSelectionAllowed(false);
         coachesTable.setCellSelectionEnabled(true);
+//        coachesTable.setEnabled(false);
         coachesTable.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -478,7 +483,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         int row = coachesTable.getSelectedRow();
         int column = coachesTable.getSelectedColumn();
         String clickValue = coachesTable.getValueAt(row, column).toString();
-        Coach selectedCoach = null;
+        selectedCoach = null;
 
         if (clickValue.equals("Click Here to Book")) {
             for (Coach c : coachesAL2) {
@@ -509,38 +514,53 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         ArrayList<Bookings> selectedCoachAppointmentsAL = new ArrayList<Bookings>();
         int counter = 0;
         if (selectedCoach != null) {
-//            for(Bookings b : bookingsAL) {
-////                b.getCoach().getId() == selectedCoach.getId();
-////                b.getBookingType().equals("Appointment");
-////                b.getSlot();
-////                b.getBookingDateTime();
-//                    if((b.getCoach().getId()==selectedCoach.getId()) && b.getBookingType().equals("Appointment") && b.getStatus().equals("Booked")) {
-//                        selectedCoachAppointmentsAL.add(b);
-//                    }
-//
-//            }
+            for (Bookings b : bookingsAL) {
+//                b.getCoach().getId() == selectedCoach.getId();
+//                b.getBookingType().equals("Appointment");
+//                b.getSlot();
+//                b.getBookingDateTime();
+                if (b.getBookingType().equals("Appointment")) {
+                    if ((b.getCoach().getId() == selectedCoach.getId()) && b.getStatus().equals("Booked")) {
+                        selectedCoachAppointmentsAL.add(b);
+                    }
+                }
+
+            }
 //                String tempDate = getDateTimeShortString(c.getOfficeHour());
 //                String oneHour = addHour(c.getOfficeHour());
 //                String res = tempDate.concat(" - "+oneHour);
 //                System.out.println("res" + res);
 //            String officeHour = getOfficeHourShortString(selectedCoach.getOfficeHour());
-            
+
             for (int i = 0; i < 4; i++) {
-                System.out.println("Week " + (i + 1));
+//                System.out.println("Week " + (i + 1));
+                String[] data1 = null, data2 = null, data3 = null;
                 // Slot 1
-                
                 String[] tempData1 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 1), "Click Here to Book"};
-                
+                data1 = tempData1;
                 //Slot 2
                 String[] tempData2 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 2), "Click Here to Book"};
-                
+                data2 = tempData2;
                 //Slot 3
                 String[] tempData3 = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 3), "Click Here to Book"};
-                
-                
-                tableData[counter] = tempData1;
-                tableData[counter + 1] = tempData2;
-                tableData[counter + 2] = tempData3;
+                data3 = tempData3;
+
+                for (Bookings b : selectedCoachAppointmentsAL) {
+                    if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 1) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 1), "Booked"};
+                        data1 = tempData;
+                    } else if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 2) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 2), "Booked"};
+                        data2 = tempData;
+                    } else if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 3) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 3), "Booked"};
+                        data3 = tempData;
+                    }
+                }
+
+                tableData[counter] = data1;
+                tableData[counter + 1] = data2;
+                tableData[counter + 2] = data3;
                 counter += 3;
 //                data.add(tempData1);
 //                data.add(tempData2);
@@ -549,7 +569,40 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         }
 
-        JTable appointmentTable = new JTable(tableData, columnNames);
+        appointmentTable = new JTable(tableData, columnNames);
+        appointmentTable.setRowSelectionAllowed(false);
+        appointmentTable.setColumnSelectionAllowed(false);
+        appointmentTable.setCellSelectionEnabled(true);
+//        appointmentTable.setEnabled(false);
+        appointmentTable.setRowHeight(35);
+        appointmentTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                handleAppointmentBooking();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+        });
 //        JTable appointmentTable = new JTable(5, 5);
 
         JScrollPane scrollPane = new JScrollPane(appointmentTable);
@@ -617,8 +670,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //        return 
 //    }
     public void studentLessonBooking() {
+//        System.out.println("-------------------------------");
         int row = lessonsTable.getSelectedRow();
         int column = lessonsTable.getSelectedColumn();
+//        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
         String selectedValue = lessonsTable.getValueAt(row, column).toString();
         System.out.println(row + "" + column + "" + selectedValue);
 
@@ -694,6 +749,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         timeTable.setRowSelectionAllowed(false);
         timeTable.setColumnSelectionAllowed(false);
         timeTable.setCellSelectionEnabled(true);
+//        timeTable.setEnabled(false);
 //        timeTable.setAlignmentX(SwingConstants.CENTER);
 //        timeTable.setAlignmentY(SwingConstants.CENTER);
 //timeTable.setHorizontalAlignment(SwingConstants.CENTER);
@@ -785,6 +841,32 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         add(bookingPanel);
     }
 
+    public void handleAppointmentBooking() {
+        int row = appointmentTable.getSelectedRow();
+        int column = appointmentTable.getSelectedColumn();
+        String selectedValue = appointmentTable.getValueAt(row, column).toString();
+        String selectedDate = appointmentTable.getValueAt(row, 0).toString();
+        String selectedTime = appointmentTable.getValueAt(row, 1).toString();
+        int bookingSlot = getBookingSlot(selectedTime);
+//        Bookings tempBooking = null;
+
+        if (selectedValue.equals("Click Here to Book")) {
+            int res = JOptionPane.showConfirmDialog(coachAppointmentPanel, "Please confirm that you would like to book the appointment for " + selectedCoach.getFullName() + " on " + selectedDate + " at " + selectedTime, "Confirm Booking", JOptionPane.YES_NO_OPTION);
+//            System.out.println("RES " + res);
+            if (res == JOptionPane.YES_OPTION) {
+                //        Bookings (Coach coach, String note, int slot, String status, String dateTime_
+
+                bookingsAL.add(new Bookings(selectedCoach, loginStudentNameField.getText(), bookingSlot , "Booked", getLongDate(selectedDate, selectedCoach.getOfficeHour())));
+            }
+        } else if (selectedValue.equals("Booked")) {
+            JOptionPane.showMessageDialog(coachAppointmentPanel, "Sorry, the appointment slot is already booked.", "Alert", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        coachAppointmentPanel.setVisible(false);
+        generateCoachAppointmentPanel();
+
+    }
+
     public String getDateTimeString(String dateTime) {
         String res = "";
 
@@ -820,6 +902,18 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         return res;
     }
+    
+    public String getShortTimeString(String dateTime) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+        System.out.println(res);
+
+        return res;
+    }
 
     public String getDateString(String dateTime) {
         String res = "";
@@ -841,6 +935,18 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
 //        System.out.println(res);
+
+        return res;
+    }
+    
+    public String getLongDate(String date, String time) {
+        String res = "";
+        String finalDate = date + " " + getShortTimeString(time);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("E, dd-MMM-yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDT = LocalDateTime.parse(finalDate, dateFormat);
+        res = localDT.format(formatter);
+        System.out.println(res);
 
         return res;
     }
@@ -901,6 +1007,17 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         return res;
     }
 
+    private String getOfficeHourLongDate(String dateTime, int i) {
+        String res = "";
+
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat).plusWeeks(i);
+        res = localDT.format(formatter);
+//        System.out.println(res + "-------------");
+        return res;
+    }
+
     private String getOfficeTimeString(String dateTime, int i) {
         String res = "";
         LocalDateTime localDTStart = null, localDTEnd = null;
@@ -923,6 +1040,23 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         }
 
         res = localDTStart.format(formatter) + " - " + localDTEnd.format(formatter);
+
+        return res;
+    }
+
+    public int getBookingSlot(String dateTime) {
+        int res = 0;
+        // Receives 16:00 - 16:20 splits by "-" then splits again by ":" to get the end time minutes
+        String endMinutes = dateTime.split(" - ")[1].split(":")[1];
+        
+        if(endMinutes.equals("20")) {
+            res = 1;
+        } else if(endMinutes.equals("40")){
+            res = 2;
+        } else if(endMinutes.equals("00")){
+            res = 3;
+        }
+        
 
         return res;
     }

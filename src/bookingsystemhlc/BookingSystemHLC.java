@@ -64,7 +64,7 @@ public class BookingSystemHLC{
         ArrayList<Coach> coachesAL = generateCoachData();
         ArrayList <Student> studentsAL = generateStudentData();
         ArrayList <Lessons> lessonsAL = generateLessonsData(coachesAL);
-        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL);
+        ArrayList<Bookings> bookingsAL = generateBookingsData(studentsAL, lessonsAL, coachesAL);
         
 //        MainFrame frame = new MainFrame(coachesAL, studentsAL, bookingsAL);
         GraphicsFrame frame = new GraphicsFrame(coachesAL, studentsAL, lessonsAL, bookingsAL);
@@ -345,7 +345,7 @@ public class BookingSystemHLC{
         
         return lessonsAL;
     }
-    public static ArrayList<Bookings> generateBookingsData(ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL){
+    public static ArrayList<Bookings> generateBookingsData(ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Coach> coachesAL){
         //        Bookings (Student student, Lessons lesson ) for Lesson Booking
         //        Bookings (Coach coach, String note, int slot) for Office Hour Booking
         ArrayList<Bookings> bookingsAL = new ArrayList<Bookings>();
@@ -372,9 +372,17 @@ public class BookingSystemHLC{
            bookingsAL.add(new Bookings(student, lesson, "Booked"));
         }
         
+//        Bookings (Coach coach, String note, int slot, String status, String dateTime_
+        bookingsAL.add(new Bookings(coachesAL.get(0), "parent", 1, "Booked", coachesAL.get(0).getOfficeHour()));
+        bookingsAL.add(new Bookings(coachesAL.get(0), "parent", 2, "Booked", coachesAL.get(0).getOfficeHour()));
+        bookingsAL.add(new Bookings(coachesAL.get(1), "parent", 1, "Booked", coachesAL.get(1).getOfficeHour()));
+        bookingsAL.add(new Bookings(coachesAL.get(2), "parent", 1, "Booked", coachesAL.get(2).getOfficeHour()));
+        bookingsAL.add(new Bookings(coachesAL.get(3), "parent", 3, "Booked", coachesAL.get(3).getOfficeHour()));
         return bookingsAL;
         
         
     }
+    
+    
     
 }
