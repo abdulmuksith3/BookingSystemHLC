@@ -34,6 +34,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JPanel parentPanel;
     private JPanel bookingPanel;
     private JPanel coachAppointmentPanel;
+    private JPanel newStudentPanel;
 
     private JLabel loginTitleLabel;
     private JLabel loginStudentNameLabel;
@@ -49,6 +50,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JTable lessonsTable;
 
     private JButton myBookingsButton;
+    private JTable timeTable;
 
     private JButton studentPanelButton;
 
@@ -59,6 +61,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JTable coachesTable;
     private JTable appointmentTable;
     private Coach selectedCoach;
+    
+    private JTextField studentNameField, studentAddressField, studentTelephoneField;
+    private JButton newStudentRegisterButton;
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
         super("Booking System HLC");
@@ -144,10 +149,19 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         studentPanel = new JPanel(new BorderLayout());
 
         JLabel greetingLabel = new JLabel("Hello " + student.getFullName() + "!");
-        greetingLabel.setPreferredSize(new Dimension(200, 100));
+        greetingLabel.setPreferredSize(new Dimension(625, 100));
         greetingLabel.setFont(new Font("Serif", Font.BOLD, 25));
         greetingLabel.setBorder(new EmptyBorder(0, 30, 0, 0));
-        studentPanel.add(greetingLabel, BorderLayout.NORTH);
+        
+        myBookingsButton = new JButton("My TimeTable");
+        myBookingsButton.setPreferredSize(new Dimension(200,50));
+        myBookingsButton.addActionListener(this);
+        
+        JPanel topPanel = new JPanel(new FlowLayout());
+        topPanel.add(greetingLabel);
+        topPanel.add(myBookingsButton);
+        
+        studentPanel.add(topPanel, BorderLayout.NORTH);
 
         studentSearchField = new JTextField();
         studentSearchField.setPreferredSize(new Dimension(625, 50));
@@ -278,10 +292,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         studentPanel.add(centerPanel, BorderLayout.CENTER);
         JPanel emptyWest = new JPanel();
-        JPanel emptyEast = new JPanel();
-        myBookingsButton = new JButton("My TimeTable");
-        myBookingsButton.addActionListener(this);
-        emptyEast.add(myBookingsButton);
+        JPanel emptyEast = new JPanel();        
+//        emptyEast.add(myBookingsButton);
         JPanel emptySouth = new JPanel();
 
         studentPanel.add(emptyEast, BorderLayout.EAST);
@@ -318,6 +330,15 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             parentPanel.setVisible(false);
             parentSearch();
             parentLogin();
+        }
+        if(e.getSource() == newStudentRegisterButton) {
+           studentsAL.add(new Student(loginStudentNameField.getText(), studentAddressField.getText(), studentTelephoneField.getText()));
+           
+           newStudentPanel.setVisible(false);
+            
+//            generateStudentPanel();
+
+            studentLogin();
         }
 
 //        switch(res){
@@ -375,6 +396,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         }
         if (count == studentsAL.size()) {
             System.out.println("New Student");
+            mainPanel.setVisible(false);
+            generateNewStudentPanel();
         }
     }
 
@@ -739,8 +762,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //        midPanel.add(label,4,2);
         int columnLength = 6;
         int rowLength = 5;
-        JTable timeTable = new JTable(rowLength, columnLength);
-        timeTable.setRowHeight(100);
+        timeTable = new JTable(rowLength, columnLength);
+        timeTable.setRowHeight(100);        
         for (int i = 0; i < columnLength; i++) {
             timeTable.getColumnModel().getColumn(i).setPreferredWidth(125);
         }
@@ -806,6 +829,15 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 int row = timeTable.getSelectedRow();
                 int column = timeTable.getSelectedColumn();
+                
+                try{
+                    String selectedValue = timeTable.getValueAt(row, column).toString();
+                    System.out.println("seeeeeelected " + selectedValue);
+                } catch(Exception ex) {
+                    System.out.println("No Booking at that time");
+                }
+//                String selectedValue = timeTable.getValueAt(row, column).toString();
+                
 //                   String selectedValue = timeTable.getValueAt(row, column).toString();
 
             }
@@ -996,7 +1028,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         return res;
     }
 
-    private String getOfficeHourDate(String dateTime, int i) {
+    public String getOfficeHourDate(String dateTime, int i) {
         String res = "";
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -1007,7 +1039,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         return res;
     }
 
-    private String getOfficeHourLongDate(String dateTime, int i) {
+    public String getOfficeHourLongDate(String dateTime, int i) {
         String res = "";
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -1018,7 +1050,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         return res;
     }
 
-    private String getOfficeTimeString(String dateTime, int i) {
+    public String getOfficeTimeString(String dateTime, int i) {
         String res = "";
         LocalDateTime localDTStart = null, localDTEnd = null;
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -1059,6 +1091,71 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         
 
         return res;
+    }
+
+    public void generateNewStudentPanel() {
+        newStudentPanel = new JPanel(new BorderLayout());
+        JPanel topPanel = new JPanel();
+        JPanel midPanel = new JPanel(new GridLayout(6,0));
+        JPanel emptyWest = new JPanel();
+        JPanel emptyEast = new JPanel();
+        JPanel emptySouth = new JPanel();
+        
+        JLabel titleLabel = new JLabel("New Student Registration");
+        titleLabel.setPreferredSize(new Dimension(150,100));
+        topPanel.add(titleLabel);
+        
+        JPanel row1 = new JPanel(new FlowLayout());
+        JPanel row2 = new JPanel(new FlowLayout());
+        JPanel row3 = new JPanel(new FlowLayout());
+        JPanel row4 = new JPanel(new FlowLayout());
+        
+        JLabel studentNameLabel = new JLabel("Full Name :");
+        studentNameLabel.setPreferredSize(new Dimension(100,40));
+        
+        JLabel studentAddressLabel = new JLabel("Address :");
+        studentAddressLabel.setPreferredSize(new Dimension(100,40));
+        
+        JLabel studentTelephoneLabel = new JLabel("Telephone No. :");
+        studentTelephoneLabel.setPreferredSize(new Dimension(100,40));
+        
+//        studentNameField = new JTextField();
+//        studentNameField.setPreferredSize(new Dimension(200,40));
+//        studentNameField.setText(loginStudentNameField.getText());
+        
+        loginStudentNameField = new JTextField();
+        loginStudentNameField.setPreferredSize(new Dimension(200,40));
+
+        studentAddressField = new JTextField();
+        studentAddressField.setPreferredSize(new Dimension(200,40));
+        
+        studentTelephoneField = new JTextField();  
+        studentTelephoneField.setPreferredSize(new Dimension(200,40));
+        
+        newStudentRegisterButton = new JButton("Register");
+        newStudentRegisterButton.addActionListener(this);
+        newStudentRegisterButton.setPreferredSize(new Dimension(100,50));
+        
+        row1.add(studentNameLabel);
+        row1.add(loginStudentNameField);        
+        row2.add(studentAddressLabel);
+        row2.add(studentAddressField);        
+        row3.add(studentTelephoneLabel);
+        row3.add(studentTelephoneField);        
+        row4.add(newStudentRegisterButton);
+        
+        midPanel.add(row1);
+        midPanel.add(row2);
+        midPanel.add(row3);
+        midPanel.add(row4);
+        
+        newStudentPanel.add(topPanel, BorderLayout.NORTH);
+        newStudentPanel.add(midPanel, BorderLayout.CENTER);
+        newStudentPanel.add(emptyWest, BorderLayout.WEST);
+        newStudentPanel.add(emptyEast, BorderLayout.EAST);
+        newStudentPanel.add(emptySouth, BorderLayout.SOUTH);
+        
+        add(newStudentPanel);
     }
 
 }
