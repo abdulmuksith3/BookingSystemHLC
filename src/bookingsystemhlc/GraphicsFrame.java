@@ -35,6 +35,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JPanel bookingPanel;
     private JPanel coachAppointmentPanel;
     private JPanel newStudentPanel;
+    private JPanel reportPanel1;
+    private JPanel reportPanel2;
 
     private JLabel loginTitleLabel;
     private JLabel loginNameLabel;
@@ -54,6 +56,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JButton prevWeekButton;
     private JButton nextWeekButton;
     private int weekNo = 1;
+    private boolean isBookingChange = false;
+    private Bookings changingBooking;
 
     private JButton studentPanelButton;
 
@@ -68,6 +72,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JTextField studentNameField, studentAddressField, studentTelephoneField;
     private JButton newStudentRegisterButton;
 
+    private JMenuItem logout, report1, report2;
+    private ArrayList<JPanel> panelsAL = new ArrayList<JPanel>();
+
     public GraphicsFrame() {
     }
 
@@ -80,11 +87,38 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         this.lessonsAL2 = lessonsAL;
         this.coachesAL2 = coachesAL;
 
+        this.panelsAL.add(mainPanel);
+        this.panelsAL.add(studentPanel);
+        this.panelsAL.add(parentPanel);
+        this.panelsAL.add(bookingPanel);
+        this.panelsAL.add(coachAppointmentPanel);
+        this.panelsAL.add(newStudentPanel);
+        this.panelsAL.add(reportPanel1);
+        this.panelsAL.add(reportPanel2);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //        setLayout (new BoxLayout(getContentPane (), BoxLayout.Y_AXIS));
 //        setLayout(new BorderLayout());
 
         c = getContentPane();
+
+        JMenuBar mb = new JMenuBar();
+        setJMenuBar(mb);
+
+        JMenu profile = new JMenu("Profile");
+        logout = new JMenuItem("Logout");
+        logout.addActionListener(this);
+        profile.add(logout);
+        mb.add(profile);
+
+        JMenu reports = new JMenu("Reports");
+        report1 = new JMenuItem("Report 1");
+        report1.addActionListener(this);
+        report2 = new JMenuItem("Report 2");
+        report2.addActionListener(this);
+        reports.add(report1);
+        reports.add(report2);
+        mb.add(reports);
 
         generateMainPanel();
 
@@ -218,7 +252,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         String[][] tableData = new String[lessonsAL2.size()][];
         String[] columnNames = {"Lesson ID", "Expertise", "Coach", "Date&Time", "Location", "Capacity", "Book"};
         int counter = 0;
-        for (Lessons l : lessonsAL2) {
+        for (Lessons l : lessonsAL) {
             String bookingButton = "Click Here to Book";
             if (l.getCapacity() == 0) {
                 bookingButton = "Lesson Full";
@@ -230,9 +264,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
                         if (b.getStatus().equals("Cancelled")) {
 
                         } else {
+//                            bookingButton = b.getStatus();
                             bookingButton = b.getStatus();
                         }
-                    } else if (b.getLesson().getDateTime().equals(l.getDateTime())) {
+                    } else if (b.getLesson().getDateTime().equals(l.getDateTime()) && b.getStatus().equals("Booked")) {
                         bookingButton = "Time Conflict";
                     }
 
@@ -363,6 +398,17 @@ public class GraphicsFrame extends JFrame implements ActionListener {
                 generateMyBookings();
             }
         }
+        if (e.getSource() == logout) {
+            System.out.println("Loggin out");
+        }
+        if (e.getSource() == report1) {
+            System.out.println("Report 1");
+            generateReport1();
+        }
+        if (e.getSource() == report2) {
+            System.out.println("Report 2");
+            generateReport2();
+        }
 //        switch(res){
 //            case "studentlogin":
 //                int count = 0;
@@ -388,6 +434,27 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //                System.out.println("parent");
 //                break;
 //    }
+    }
+    
+    public void generateReport1(){
+        reportPanel1 = new JPanel(new BorderLayout());
+        JLabel label = new JLabel("TESTTTT");
+        reportPanel1.add(label, BorderLayout.CENTER);
+        setPanelVisible(reportPanel1);
+    }
+    
+    public void generateReport2(){
+        
+    }
+    
+    public void setPanelVisible(JPanel panel){
+        for(JPanel p : panelsAL){
+            if(p!= null && p.isVisible()){
+                p.setVisible(false);
+            }
+        }
+        add(panel);
+        panel.setVisible(true);
     }
 
     public void studentLogin() {
@@ -734,15 +801,26 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         if (selectedValue.equals("Click Here to Book")) {
             System.out.println("Booking");
             int res = JOptionPane.showConfirmDialog(studentPanel, "Please confirm that you would like to book the lesson " + selectedLesson.getName() + " on " + selectedLesson.getDateTime(), "Confirm Booking", JOptionPane.YES_NO_OPTION);
+
 //            System.out.println("RES " + res);
             if (res == JOptionPane.YES_OPTION) {
 //                System.out.println("YES CHOSEN-BOOKED");
+
                 if (selectedLesson.getCapacity() > 0) {
                     lessonsAL.get(lessonsAL.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity() - 1);
 //                    lessonsAL2.get(lessonsAL2.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity()-1);
-                    Bookings newBooking = new Bookings(student, selectedLesson, "Booked");
-                    bookingsAL.add(newBooking);
-                    studentBookingsAL.add(newBooking);
+                    if (isBookingChange) {
+                        bookingsAL.get(bookingsAL.indexOf(changingBooking)).setLesson(selectedLesson);
+                        bookingsAL.get(bookingsAL.indexOf(changingBooking)).setStatus("Booked");
+//    studentBookingsAL.get(studentBookingsAL.indexOf(changingBooking)).setLesson(selectedLesson);
+//    studentBookingsAL.get(studentBookingsAL.indexOf(changingBooking)).setStatus("Booked");
+                        isBookingChange = false;
+                    } else {
+                        Bookings newBooking = new Bookings(student, selectedLesson, "Booked");
+                        bookingsAL.add(newBooking);
+                        studentBookingsAL.add(newBooking);
+                    }
+
                 }
 
                 studentPanel.setVisible(false);
@@ -761,11 +839,11 @@ public class GraphicsFrame extends JFrame implements ActionListener {
                 if (b.getLesson().getId() == selectedLesson.getId() && b.getBookingType().equals("Lesson")) {
                     selectedBooking = b;
 //                    System.out.println("bbbbbbbbb " + b.getId());
-                    
+
                 }
             }
 //            System.out.println("seleee\t" + selectedBooking.getId() + "\t" + selectedBooking.getLesson().getName());
-            amendBooking(selectedBooking, studentPanel);
+            handleBooking(selectedBooking, studentPanel);
             studentPanel.setVisible(false);
             generateStudentPanel();
 //            generateMyBookings();
@@ -950,9 +1028,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //
 //                    bookingsAL.add(index, selectedBooking);
 //                    studentBookingsAL.add(studentBookingIndex, selectedBooking);
-                    amendBooking(selectedBooking, bookingPanel);
+                    handleBooking(selectedBooking, bookingPanel);
                     bookingPanel.setVisible(false);
-                    generateMyBookings();
+//                    generateMyBookings();
+                    generateStudentPanel();
                 } catch (Exception exception) {
                     System.out.println("No Booking at that time ");
                 }
@@ -992,7 +1071,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         add(bookingPanel);
     }
 
-    public void amendBooking(Bookings selectedBooking, JPanel currentPanel) {
+    public void handleBooking(Bookings selectedBooking, JPanel currentPanel) {
         int res = 0;
         String[] options = {"Attend", "Cancel Booking", "Change Booking"};
         if (selectedBooking.getStatus().equals("Attended")) {
@@ -1024,7 +1103,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         } else if (res == 2) {
             System.out.println("Changing");
-            selectedBooking.setStatus("Changed");
+            JOptionPane.showMessageDialog(currentPanel, "Please note the next lesson you book will replace the booking you're trying to change", "Change Booking", JOptionPane.INFORMATION_MESSAGE);
+            selectedBooking.setStatus("Changing Lesson");
+            changingBooking = selectedBooking;
+            isBookingChange = true;
         }
         bookingsAL.remove(index);
         studentBookingsAL.remove(studentBookingIndex);

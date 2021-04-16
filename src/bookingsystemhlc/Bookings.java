@@ -19,7 +19,7 @@ public class Bookings {
     private String note;
     private int slot;
     private String status;
-    private String dateTime;
+    private String appointmentDateTime;
     
     private String bookingType;
     
@@ -40,48 +40,82 @@ public class Bookings {
         this.slot = slot;
         this.bookingType = "Appointment";
         this.status = status;
-        this.dateTime = dateTime;
+        this.appointmentDateTime = dateTime;
     }
     
     public int getId(){
         return id;
     } 
+    
+    public void setId(int id){
+        this.id = id;
+    }
      
     public Student getStudent(){
         return student;
+    }
+    
+    public void setStudent(Student student){
+        this.student = student;
     }
     
     public Lessons getLesson(){
         return lesson;
     }
     
+    public void setLesson(Lessons lesson){
+        this.lesson = lesson;
+    }
+    
     public String getBookingType(){
         return bookingType;
+    }
+    
+    public void setBookingType(String type){
+        this.bookingType = type;
     }
     
     public Coach getCoach(){
         return coach;
     }
     
+    public void setCoach(Coach c) {
+        this.coach=c;
+    }
+    
     public String getNote(){
         return note;
+    }
+    
+    public void setNote(String s) {
+        this.note = s;
     }
     
     public int getSlot(){
         return slot;
     }
     
+    public void setSlot (int slot){
+        this.slot = slot;
+    }
+    
     public String getStatus(){
         return status;
     }
     
-    public String getAppointmentBookingDateTime() {
-        return dateTime;
+    public void setStatus(String s){
+        this.status=s;
     }
     
-    public void setStatus(String status){
-        this.status = status;
+    public String getAppointmentBookingDateTime() {
+        return appointmentDateTime;
     }
+    
+    public void setAppointmentBookingDateTime(String s){
+        this.appointmentDateTime = s;
+    }
+    
+    
     
     
 }
