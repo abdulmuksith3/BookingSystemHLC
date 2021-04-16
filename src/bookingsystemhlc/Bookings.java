@@ -75,8 +75,12 @@ public class Bookings {
         return status;
     }
     
-    public String getBookingDateTime() {
+    public String getAppointmentBookingDateTime() {
         return dateTime;
+    }
+    
+    public void setStatus(String status){
+        this.status = status;
     }
     
     

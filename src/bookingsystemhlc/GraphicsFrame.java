@@ -25,7 +25,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private ArrayList<Coach> coachesAL2;
 
     private Student student = null;
-    private ArrayList<Bookings> studentBookings = new ArrayList<Bookings>();
+    private ArrayList<Bookings> studentBookingsAL = new ArrayList<Bookings>();
 
     private Container c;
 
@@ -37,10 +37,10 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JPanel newStudentPanel;
 
     private JLabel loginTitleLabel;
-    private JLabel loginStudentNameLabel;
-    private JTextField loginStudentNameField;
+    private JLabel loginNameLabel;
+    private JTextField loginNameField;
     private JButton loginParentButton;
-    private JButton loginSubmitButton;
+    private JButton loginStudentButton;
 
     private JTextField studentSearchField;
     private JButton studentSearchButton;
@@ -51,6 +51,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
     private JButton myBookingsButton;
     private JTable timeTable;
+    private JButton prevWeekButton;
+    private JButton nextWeekButton;
+    private int weekNo = 1;
 
     private JButton studentPanelButton;
 
@@ -61,9 +64,12 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     private JTable coachesTable;
     private JTable appointmentTable;
     private Coach selectedCoach;
-    
+
     private JTextField studentNameField, studentAddressField, studentTelephoneField;
     private JButton newStudentRegisterButton;
+
+    public GraphicsFrame() {
+    }
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
         super("Booking System HLC");
@@ -109,24 +115,24 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         loginTitleLabel.setVerticalAlignment(SwingConstants.CENTER);
         mainPanel.add(loginTitleLabel, BorderLayout.NORTH);
 
-        loginStudentNameLabel = new JLabel("Enter Your Name: ");
-        loginStudentNameLabel.setSize(new Dimension(200, 200));
-//        add(loginStudentNameLabel, BorderLayout.CENTER);
+        loginNameLabel = new JLabel("Enter Your Name: ");
+        loginNameLabel.setSize(new Dimension(200, 200));
+//        add(loginNameLabel, BorderLayout.CENTER);
 
-        loginStudentNameField = new JTextField();
-        loginStudentNameField.setPreferredSize(new Dimension(500, 50));
-//        loginStudentNameField.setSize(50,50);
-        loginStudentNameField.addActionListener(this);
-//        add(loginStudentNameField, BorderLayout.CENTER);
+        loginNameField = new JTextField();
+        loginNameField.setPreferredSize(new Dimension(500, 50));
+//        loginNameField.setSize(50,50);
+        loginNameField.addActionListener(this);
+//        add(loginNameField, BorderLayout.CENTER);
 
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new GridLayout(4, 0));
 
         JPanel rowOne = new JPanel(new FlowLayout());
-        rowOne.add(loginStudentNameLabel);
-        rowOne.add(loginStudentNameField);
+        rowOne.add(loginNameLabel);
+        rowOne.add(loginNameField);
 
-//        centerPanel.add(loginStudentNameLabel);
+//        centerPanel.add(loginNameLabel);
         centerPanel.add(rowOne);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
@@ -134,13 +140,13 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         loginParentButton.setPreferredSize(new Dimension(100, 50));
         loginParentButton.addActionListener(this);
 
-        loginSubmitButton = new JButton("Student Login");
-        loginSubmitButton.setPreferredSize(new Dimension(100, 50));
-        loginSubmitButton.addActionListener(this);
+        loginStudentButton = new JButton("Student Login");
+        loginStudentButton.setPreferredSize(new Dimension(100, 50));
+        loginStudentButton.addActionListener(this);
 
         JPanel southPanel = new JPanel();
         southPanel.setLayout(new GridLayout(2, 0));
-        southPanel.add(loginSubmitButton);
+        southPanel.add(loginStudentButton);
         southPanel.add(loginParentButton);
         mainPanel.add(southPanel, BorderLayout.SOUTH);
     }
@@ -152,15 +158,15 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         greetingLabel.setPreferredSize(new Dimension(625, 100));
         greetingLabel.setFont(new Font("Serif", Font.BOLD, 25));
         greetingLabel.setBorder(new EmptyBorder(0, 30, 0, 0));
-        
+
         myBookingsButton = new JButton("My TimeTable");
-        myBookingsButton.setPreferredSize(new Dimension(200,50));
+        myBookingsButton.setPreferredSize(new Dimension(200, 50));
         myBookingsButton.addActionListener(this);
-        
+
         JPanel topPanel = new JPanel(new FlowLayout());
         topPanel.add(greetingLabel);
         topPanel.add(myBookingsButton);
-        
+
         studentPanel.add(topPanel, BorderLayout.NORTH);
 
         studentSearchField = new JTextField();
@@ -217,12 +223,15 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             if (l.getCapacity() == 0) {
                 bookingButton = "Lesson Full";
             }
-            if (!studentBookings.isEmpty()) {
-                for (Bookings b : studentBookings) {
-                    if (b.getStatus().equals("Cancelled")) {
-                        System.out.println("Cancelled Booking");
-                    } else if (b.getLesson().getId() == l.getId()) {
-                        bookingButton = "Booked";
+            if (!studentBookingsAL.isEmpty()) {
+                for (Bookings b : studentBookingsAL) {
+                    if (b.getLesson().getId() == l.getId()) {
+
+                        if (b.getStatus().equals("Cancelled")) {
+
+                        } else {
+                            bookingButton = b.getStatus();
+                        }
                     } else if (b.getLesson().getDateTime().equals(l.getDateTime())) {
                         bookingButton = "Time Conflict";
                     }
@@ -292,7 +301,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         studentPanel.add(centerPanel, BorderLayout.CENTER);
         JPanel emptyWest = new JPanel();
-        JPanel emptyEast = new JPanel();        
+        JPanel emptyEast = new JPanel();
 //        emptyEast.add(myBookingsButton);
         JPanel emptySouth = new JPanel();
 
@@ -306,13 +315,13 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 //        String res ="";
 
-        if (e.getSource() == loginSubmitButton) {
+        if (e.getSource() == loginStudentButton) {
 //            res = "studentlogin";
             studentLogin();
         }
         if (e.getSource() == loginParentButton) {
 //            res = "parentlogin";
-            parentLogin();
+            generateParentPanel();
         }
         if (e.getSource() == studentSearchButton) {
 //            System.out.println(searchTypeDropdown.getSelectedItem());
@@ -329,23 +338,36 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         if (e.getSource() == parentSearchButton) {
             parentPanel.setVisible(false);
             parentSearch();
-            parentLogin();
+            generateParentPanel();
         }
-        if(e.getSource() == newStudentRegisterButton) {
-           studentsAL.add(new Student(loginStudentNameField.getText(), studentAddressField.getText(), studentTelephoneField.getText()));
-           
-           newStudentPanel.setVisible(false);
-            
-//            generateStudentPanel();
+        if (e.getSource() == newStudentRegisterButton) {
+            studentsAL.add(new Student(loginNameField.getText(), studentAddressField.getText(), studentTelephoneField.getText()));
 
+            newStudentPanel.setVisible(false);
+
+//            generateStudentPanel();
             studentLogin();
         }
 
+        if (e.getSource() == prevWeekButton) {
+            if (weekNo > 1) {
+                weekNo--;
+                bookingPanel.setVisible(false);
+                generateMyBookings();
+            }
+        }
+        if (e.getSource() == nextWeekButton) {
+            if (weekNo < 4) {
+                weekNo++;
+                bookingPanel.setVisible(false);
+                generateMyBookings();
+            }
+        }
 //        switch(res){
 //            case "studentlogin":
 //                int count = 0;
 //                System.out.println("Student trying to Login");
-//                String studentName = loginStudentNameField.getText();
+//                String studentName = loginNameField.getText();
 //                for(Student s : studentsAL){
 //                    if(s.getFullName().equalsIgnoreCase(studentName)){
 //                        student = s;
@@ -372,23 +394,24 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         int count = 0;
         System.out.println("Student trying to Login");
-        String studentName = loginStudentNameField.getText();
+        String studentName = loginNameField.getText();
 
         for (Student s : studentsAL) {
             if (s.getFullName().equalsIgnoreCase(studentName)) {
                 student = s;
 
                 for (Bookings b : bookingsAL) {
-                    if(b.getBookingType().equals("Lesson")){
-                    if (b.getStudent().equals(s)) {
-                        studentBookings.add(b);
+                    if (b.getBookingType().equals("Lesson")) {
+                        if (b.getStudent().equals(s)) {
+                            studentBookingsAL.add(b);
 //                        System.out.println("My Booking " + b.getId() + " " + b.getLesson().getName() + " " + b.getLesson().getCoach().getFullName() + " " + b.getLesson().getDateTime());
-                    }}
+                        }
+                    }
                 }
                 mainPanel.setVisible(false);
                 generateStudentPanel();
 //                System.out.println("Logged in: " + s.getFullName());
-//                System.out.println("Total Bookings: " + studentBookings.size());
+//                System.out.println("Total Bookings: " + studentBookingsAL.size());
             } else {
 //                        break;
                 count++;
@@ -401,9 +424,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         }
     }
 
-    public void parentLogin() {
+    public void generateParentPanel() {
         parentPanel = new JPanel(new BorderLayout());
-        parentName = loginStudentNameField.getText();
+        parentName = loginNameField.getText();
 
         JLabel titleLabel = new JLabel("Welcome " + parentName + "!");
         titleLabel.setPreferredSize(new Dimension(500, 100));
@@ -541,7 +564,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //                b.getCoach().getId() == selectedCoach.getId();
 //                b.getBookingType().equals("Appointment");
 //                b.getSlot();
-//                b.getBookingDateTime();
+//                b.getAppointmentBookingDateTime();
                 if (b.getBookingType().equals("Appointment")) {
                     if ((b.getCoach().getId() == selectedCoach.getId()) && b.getStatus().equals("Booked")) {
                         selectedCoachAppointmentsAL.add(b);
@@ -569,14 +592,14 @@ public class GraphicsFrame extends JFrame implements ActionListener {
                 data3 = tempData3;
 
                 for (Bookings b : selectedCoachAppointmentsAL) {
-                    if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 1) {
-                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 1), "Booked"};
+                    if (b.getAppointmentBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 1) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 1), "Booked - by " + b.getNote()};
                         data1 = tempData;
-                    } else if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 2) {
-                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 2), "Booked"};
+                    } else if (b.getAppointmentBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 2) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 2), "Booked - by " + b.getNote()};
                         data2 = tempData;
-                    } else if (b.getBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 3) {
-                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 3), "Booked"};
+                    } else if (b.getAppointmentBookingDateTime().equals(getOfficeHourLongDate(selectedCoach.getOfficeHour(), i)) && b.getSlot() == 3) {
+                        String[] tempData = {getOfficeHourDate(selectedCoach.getOfficeHour(), i), getOfficeTimeString(selectedCoach.getOfficeHour(), 3), "Booked - by " + b.getNote()};
                         data3 = tempData;
                     }
                 }
@@ -698,7 +721,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         int column = lessonsTable.getSelectedColumn();
 //        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
         String selectedValue = lessonsTable.getValueAt(row, column).toString();
-        System.out.println(row + "" + column + "" + selectedValue);
+//        System.out.println(row + "" + column + "" + selectedValue);
 
         Lessons selectedLesson = null;
         for (Lessons l : lessonsAL2) {
@@ -719,7 +742,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //                    lessonsAL2.get(lessonsAL2.indexOf(selectedLesson)).setCapacity(selectedLesson.getCapacity()-1);
                     Bookings newBooking = new Bookings(student, selectedLesson, "Booked");
                     bookingsAL.add(newBooking);
-                    studentBookings.add(newBooking);
+                    studentBookingsAL.add(newBooking);
                 }
 
                 studentPanel.setVisible(false);
@@ -729,9 +752,24 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //            System.out.println("Sorry Lesson Full");
             JOptionPane.showMessageDialog(studentPanel, "Sorry, the lesson is fully booked.", "Alert", JOptionPane.WARNING_MESSAGE);
         } else if (selectedValue.equals("Time Conflict")) {
-            JOptionPane.showMessageDialog(studentPanel, "Sorry, the lesson you're trying to book conflicts with the timing of another lesson.", "Alert", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(studentPanel, "Sorry, the lesson you're trying to book conflicts with the timing of another booked lesson.", "Alert", JOptionPane.WARNING_MESSAGE);
+        } else if (selectedValue.equals("Attended")) {
+            JOptionPane.showMessageDialog(studentPanel, "You have attended this lesson already!", "Lesson Attended", JOptionPane.OK_OPTION);
         } else if (selectedValue.equals("Booked")) {
-            generateMyBookings();
+            Bookings selectedBooking = null;
+            for (Bookings b : studentBookingsAL) {
+                if (b.getLesson().getId() == selectedLesson.getId() && b.getBookingType().equals("Lesson")) {
+                    selectedBooking = b;
+//                    System.out.println("bbbbbbbbb " + b.getId());
+                    
+                }
+            }
+//            System.out.println("seleee\t" + selectedBooking.getId() + "\t" + selectedBooking.getLesson().getName());
+            amendBooking(selectedBooking, studentPanel);
+            studentPanel.setVisible(false);
+            generateStudentPanel();
+//            generateMyBookings();
+
         }
 
     }
@@ -742,15 +780,35 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         JLabel titleLabel = new JLabel("My Bookings");
         titleLabel.setFont(new Font("Serif", Font.BOLD, 25));
-//        titleLabel.setPreferredSize(new);
+        titleLabel.setPreferredSize(new Dimension(700, 40));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        studentPanelButton = new JButton("Search Lessons");
+        studentPanelButton = new JButton("Go Back");
         studentPanelButton.addActionListener(this);
 
-        JPanel topPanel = new JPanel(new FlowLayout());
-        topPanel.setPreferredSize(new Dimension(500, 70));
-        topPanel.add(titleLabel);
-        topPanel.add(studentPanelButton);
+        prevWeekButton = new JButton("<");
+        prevWeekButton.addActionListener(this);
+
+        nextWeekButton = new JButton(">");
+        nextWeekButton.addActionListener(this);
+
+        JLabel weekLabel = new JLabel("Week " + weekNo);
+
+        JPanel topPanel = new JPanel(new GridLayout(2, 0));
+//        topPanel.setPreferredSize(new Dimension(500, 70));
+        JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        row1.setPreferredSize(new Dimension(700, 50));
+        JPanel row2 = new JPanel(new FlowLayout());
+
+        row1.add(studentPanelButton);
+        row1.add(titleLabel);
+
+        row2.add(prevWeekButton);
+        row2.add(weekLabel);
+        row2.add(nextWeekButton);
+
+        topPanel.add(row1);
+        topPanel.add(row2);
 
         bookingPanel.add(topPanel, BorderLayout.NORTH);
 
@@ -763,7 +821,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         int columnLength = 6;
         int rowLength = 5;
         timeTable = new JTable(rowLength, columnLength);
-        timeTable.setRowHeight(100);        
+        timeTable.setRowHeight(100);
         for (int i = 0; i < columnLength; i++) {
             timeTable.getColumnModel().getColumn(i).setPreferredWidth(125);
         }
@@ -776,7 +834,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //        timeTable.setAlignmentX(SwingConstants.CENTER);
 //        timeTable.setAlignmentY(SwingConstants.CENTER);
 //timeTable.setHorizontalAlignment(SwingConstants.CENTER);
-
+//        timeTable.revalidate();
+//        timeTable.repaint();
+//        timeTable.updateUI();
         //Coulmn Titles
         String[] columnTitles = {"Time", "Mon", "Tue", "Wed", "Thu", "Fri"};
         for (int i = 0; i < columnTitles.length; i++) {
@@ -789,32 +849,37 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             timeTable.setValueAt(rowTitles[i], i, 0);
         }
 
-        for (Bookings b : studentBookings) {
-            Lessons l = b.getLesson();
-            String value = "(ID " + b.getId() + ") " + l.getName();
-            String day = getDayString(l.getDateTime());
-            String time = getTimeString(l.getDateTime());
-            String date = getDateString(l.getDateTime());
-            int tableRow = getRow(time);
+        for (Bookings b : studentBookingsAL) {
+//            System.out.println("weeeeeek" + getBookingWeek(b.getLesson().getDateTime()));
+//            if (b.getStatus().equals("Booked") || b.getStatus().equals("Attended")) {
+            if ((b.getStatus().equals("Booked") || b.getStatus().equals("Attended")) && getBookingWeek(b.getLesson().getDateTime()) == weekNo) {
+//                System.out.println("TimeTable -------------" + b.getId() + "\t" + b.getStatus());
+                Lessons l = b.getLesson();
+                String value = "(ID " + b.getId() + ") " + l.getName();
+                String day = getDayString(l.getDateTime());
+                String time = getTimeString(l.getDateTime());
+                String date = getDateString(l.getDateTime());
+                int tableRow = getRow(time);
 
 //            timeTable.setValueAt(, NORMAL);
-            switch (day) {
-                case "Mon":
-                    timeTable.setValueAt(value, tableRow, 1);
+                switch (day) {
+                    case "Mon":
+                        timeTable.setValueAt(value, tableRow, 1);
 //                    timeTable.getColumnModel().getColumn(1).setCellRenderer();
-                    break;
-                case "Tue":
-                    timeTable.setValueAt(value, tableRow, 2);
-                    break;
-                case "Wed":
-                    timeTable.setValueAt(value, tableRow, 3);
-                    break;
-                case "Thu":
-                    timeTable.setValueAt(value, tableRow, 4);
-                    break;
-                case "Fri":
-                    timeTable.setValueAt(value, tableRow, 5);
-                    break;
+                        break;
+                    case "Tue":
+                        timeTable.setValueAt(value, tableRow, 2);
+                        break;
+                    case "Wed":
+                        timeTable.setValueAt(value, tableRow, 3);
+                        break;
+                    case "Thu":
+                        timeTable.setValueAt(value, tableRow, 4);
+                        break;
+                    case "Fri":
+                        timeTable.setValueAt(value, tableRow, 5);
+                        break;
+                }
             }
         }
 
@@ -829,17 +894,71 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 int row = timeTable.getSelectedRow();
                 int column = timeTable.getSelectedColumn();
-                
-                try{
-                    String selectedValue = timeTable.getValueAt(row, column).toString();
-                    System.out.println("seeeeeelected " + selectedValue);
-                } catch(Exception ex) {
-                    System.out.println("No Booking at that time");
+                Bookings selectedBooking = null;
+//                int res = 0;
+
+//                String[] options = new String[2];
+//                options[0] = "Cancel Booking";
+//                options[1] = "Change Booking";
+//                options[2] = "Close";
+                try {
+                    String selectedValue = timeTable.getValueAt(row, column).toString().substring(4, 6);
+//                    selectedValue.substring(4,6);
+//                    System.out.println("seeeeeelected " + selectedValue);
+
+                    for (Bookings b : bookingsAL) {
+//                        System.out.println("bbb " + b.getId());
+                        if ((b.getId() + "").equals(selectedValue)) {
+//                            System.out.println("boking found");
+                            selectedBooking = b;
+                        }
+                    }
+//                    System.out.println("JOPTION 22222222222222");
+//                    if (selectedBooking.getStatus().equals("Attended")) {
+//                        JOptionPane.showMessageDialog(bookingPanel, "You have attended this lesson already!", "Lesson Attended", JOptionPane.OK_OPTION);
+//                    } else {
+//                        
+//                        res = JOptionPane.showOptionDialog(
+//                                bookingPanel,
+//                                "Lesson: " + selectedBooking.getLesson().getName()
+//                                + "\nCoach: " + selectedBooking.getLesson().getCoach().getFullName()
+//                                + " \nTime: " + selectedBooking.getLesson().getDateTime()
+//                                + "\nLocation: " + selectedBooking.getLesson().getPlace(),
+//                                "Booking Details", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+//                    }
+//
+////                    System.out.println("JOPTION " + res);
+////                      res = 0 -> Attend
+////                      res = 1 -> Cancel Booking
+////                      res = 2 -> Change Booking
+//                    int index = bookingsAL.indexOf(selectedBooking);
+//                    int studentBookingIndex = studentBookingsAL.indexOf(selectedBooking);
+//                    if (res == 0) {
+//                        System.out.println("Attending");
+//                        selectedBooking.setStatus("Attended");
+//                    } else if (res == 1) {
+//                        System.out.println("Cancelling");
+//                        selectedBooking.setStatus("Cancelled");
+//                        selectedBooking.getLesson().setCapacity(selectedBooking.getLesson().getCapacity() + 1);
+//
+//                    } else if (res == 2) {
+//                        System.out.println("Changing");
+//                        selectedBooking.setStatus("Changed");
+//                    }
+//                    bookingsAL.remove(index);
+//                    studentBookingsAL.remove(studentBookingIndex);
+//
+//                    bookingsAL.add(index, selectedBooking);
+//                    studentBookingsAL.add(studentBookingIndex, selectedBooking);
+                    amendBooking(selectedBooking, bookingPanel);
+                    bookingPanel.setVisible(false);
+                    generateMyBookings();
+                } catch (Exception exception) {
+                    System.out.println("No Booking at that time ");
                 }
 //                String selectedValue = timeTable.getValueAt(row, column).toString();
-                
-//                   String selectedValue = timeTable.getValueAt(row, column).toString();
 
+//                   String selectedValue = timeTable.getValueAt(row, column).toString();
             }
 
             @Override
@@ -873,6 +992,67 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         add(bookingPanel);
     }
 
+    public void amendBooking(Bookings selectedBooking, JPanel currentPanel) {
+        int res = 0;
+        String[] options = {"Attend", "Cancel Booking", "Change Booking"};
+        if (selectedBooking.getStatus().equals("Attended")) {
+            JOptionPane.showMessageDialog(bookingPanel, "You have attended this lesson already!", "Lesson Attended", JOptionPane.OK_OPTION);
+        } else {
+
+            res = JOptionPane.showOptionDialog(
+                    currentPanel,
+                    "Lesson: " + selectedBooking.getLesson().getName()
+                    + "\nCoach: " + selectedBooking.getLesson().getCoach().getFullName()
+                    + " \nTime: " + selectedBooking.getLesson().getDateTime()
+                    + "\nLocation: " + selectedBooking.getLesson().getPlace(),
+                    "Booking Details", 0, JOptionPane.INFORMATION_MESSAGE, null, options, null);
+        }
+
+//                    System.out.println("JOPTION " + res);
+//                      res = 0 -> Attend
+//                      res = 1 -> Cancel Booking
+//                      res = 2 -> Change Booking
+        int index = bookingsAL.indexOf(selectedBooking);
+        int studentBookingIndex = studentBookingsAL.indexOf(selectedBooking);
+        if (res == 0) {
+            System.out.println("Attending");
+            selectedBooking.setStatus("Attended");
+        } else if (res == 1) {
+            System.out.println("Cancelling");
+            selectedBooking.setStatus("Cancelled");
+            selectedBooking.getLesson().setCapacity(selectedBooking.getLesson().getCapacity() + 1);
+
+        } else if (res == 2) {
+            System.out.println("Changing");
+            selectedBooking.setStatus("Changed");
+        }
+        bookingsAL.remove(index);
+        studentBookingsAL.remove(studentBookingIndex);
+
+        bookingsAL.add(index, selectedBooking);
+        studentBookingsAL.add(studentBookingIndex, selectedBooking);
+
+//        bookingPanel.setVisible(false);
+    }
+
+    public int getBookingWeek(String dateTime) {
+        int res = 0;
+//        System.out.println("-----------");
+        int numericDate = Integer.parseInt(getNumericDateString(dateTime));
+//        System.out.println("===========" + numericDate);
+        if (numericDate <= 7) {
+            res = 1;
+        } else if (numericDate <= 14) {
+            res = 2;
+        } else if (numericDate <= 21) {
+            res = 3;
+        } else {
+            res = 4;
+        }
+
+        return res;
+    }
+
     public void handleAppointmentBooking() {
         int row = appointmentTable.getSelectedRow();
         int column = appointmentTable.getSelectedColumn();
@@ -888,12 +1068,12 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             if (res == JOptionPane.YES_OPTION) {
                 //        Bookings (Coach coach, String note, int slot, String status, String dateTime_
 
-                bookingsAL.add(new Bookings(selectedCoach, loginStudentNameField.getText(), bookingSlot , "Booked", getLongDate(selectedDate, selectedCoach.getOfficeHour())));
+                bookingsAL.add(new Bookings(selectedCoach, loginNameField.getText(), bookingSlot, "Booked", getLongDate(selectedDate, selectedCoach.getOfficeHour())));
             }
         } else if (selectedValue.equals("Booked")) {
             JOptionPane.showMessageDialog(coachAppointmentPanel, "Sorry, the appointment slot is already booked.", "Alert", JOptionPane.WARNING_MESSAGE);
         }
-        
+
         coachAppointmentPanel.setVisible(false);
         generateCoachAppointmentPanel();
 
@@ -906,7 +1086,19 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E, yyyy-MM-dd HH:mm");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
+
+        return res;
+    }
+
+    public String getNumericDateString(String dateTime) {
+        String res = "";
+//System.out.println(res + "kkkkkkkkkkk " + dateTime);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
+        LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
+        res = localDT.format(formatter);
+//        System.out.println(res + "+++++++++++");
 
         return res;
     }
@@ -918,7 +1110,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("E");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
 
         return res;
     }
@@ -930,11 +1122,11 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
 
         return res;
     }
-    
+
     public String getShortTimeString(String dateTime) {
         String res = "";
 
@@ -942,7 +1134,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
 
         return res;
     }
@@ -954,7 +1146,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd");
         LocalDateTime localDT = LocalDateTime.parse(dateTime, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
 
         return res;
     }
@@ -970,7 +1162,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         return res;
     }
-    
+
     public String getLongDate(String date, String time) {
         String res = "";
         String finalDate = date + " " + getShortTimeString(time);
@@ -978,7 +1170,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime localDT = LocalDateTime.parse(finalDate, dateFormat);
         res = localDT.format(formatter);
-        System.out.println(res);
+//        System.out.println(res);
 
         return res;
     }
@@ -1080,15 +1272,14 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         int res = 0;
         // Receives 16:00 - 16:20 splits by "-" then splits again by ":" to get the end time minutes
         String endMinutes = dateTime.split(" - ")[1].split(":")[1];
-        
-        if(endMinutes.equals("20")) {
+
+        if (endMinutes.equals("20")) {
             res = 1;
-        } else if(endMinutes.equals("40")){
+        } else if (endMinutes.equals("40")) {
             res = 2;
-        } else if(endMinutes.equals("00")){
+        } else if (endMinutes.equals("00")) {
             res = 3;
         }
-        
 
         return res;
     }
@@ -1096,65 +1287,64 @@ public class GraphicsFrame extends JFrame implements ActionListener {
     public void generateNewStudentPanel() {
         newStudentPanel = new JPanel(new BorderLayout());
         JPanel topPanel = new JPanel();
-        JPanel midPanel = new JPanel(new GridLayout(6,0));
+        JPanel midPanel = new JPanel(new GridLayout(6, 0));
         JPanel emptyWest = new JPanel();
         JPanel emptyEast = new JPanel();
         JPanel emptySouth = new JPanel();
-        
+
         JLabel titleLabel = new JLabel("New Student Registration");
-        titleLabel.setPreferredSize(new Dimension(150,100));
+        titleLabel.setPreferredSize(new Dimension(150, 100));
         topPanel.add(titleLabel);
-        
+
         JPanel row1 = new JPanel(new FlowLayout());
         JPanel row2 = new JPanel(new FlowLayout());
         JPanel row3 = new JPanel(new FlowLayout());
         JPanel row4 = new JPanel(new FlowLayout());
-        
+
         JLabel studentNameLabel = new JLabel("Full Name :");
-        studentNameLabel.setPreferredSize(new Dimension(100,40));
-        
+        studentNameLabel.setPreferredSize(new Dimension(100, 40));
+
         JLabel studentAddressLabel = new JLabel("Address :");
-        studentAddressLabel.setPreferredSize(new Dimension(100,40));
-        
+        studentAddressLabel.setPreferredSize(new Dimension(100, 40));
+
         JLabel studentTelephoneLabel = new JLabel("Telephone No. :");
-        studentTelephoneLabel.setPreferredSize(new Dimension(100,40));
-        
+        studentTelephoneLabel.setPreferredSize(new Dimension(100, 40));
+
 //        studentNameField = new JTextField();
 //        studentNameField.setPreferredSize(new Dimension(200,40));
-//        studentNameField.setText(loginStudentNameField.getText());
-        
-        loginStudentNameField = new JTextField();
-        loginStudentNameField.setPreferredSize(new Dimension(200,40));
+//        studentNameField.setText(loginNameField.getText());
+        loginNameField = new JTextField();
+        loginNameField.setPreferredSize(new Dimension(200, 40));
 
         studentAddressField = new JTextField();
-        studentAddressField.setPreferredSize(new Dimension(200,40));
-        
-        studentTelephoneField = new JTextField();  
-        studentTelephoneField.setPreferredSize(new Dimension(200,40));
-        
+        studentAddressField.setPreferredSize(new Dimension(200, 40));
+
+        studentTelephoneField = new JTextField();
+        studentTelephoneField.setPreferredSize(new Dimension(200, 40));
+
         newStudentRegisterButton = new JButton("Register");
         newStudentRegisterButton.addActionListener(this);
-        newStudentRegisterButton.setPreferredSize(new Dimension(100,50));
-        
+        newStudentRegisterButton.setPreferredSize(new Dimension(100, 50));
+
         row1.add(studentNameLabel);
-        row1.add(loginStudentNameField);        
+        row1.add(loginNameField);
         row2.add(studentAddressLabel);
-        row2.add(studentAddressField);        
+        row2.add(studentAddressField);
         row3.add(studentTelephoneLabel);
-        row3.add(studentTelephoneField);        
+        row3.add(studentTelephoneField);
         row4.add(newStudentRegisterButton);
-        
+
         midPanel.add(row1);
         midPanel.add(row2);
         midPanel.add(row3);
         midPanel.add(row4);
-        
+
         newStudentPanel.add(topPanel, BorderLayout.NORTH);
         newStudentPanel.add(midPanel, BorderLayout.CENTER);
         newStudentPanel.add(emptyWest, BorderLayout.WEST);
         newStudentPanel.add(emptyEast, BorderLayout.EAST);
         newStudentPanel.add(emptySouth, BorderLayout.SOUTH);
-        
+
         add(newStudentPanel);
     }
 

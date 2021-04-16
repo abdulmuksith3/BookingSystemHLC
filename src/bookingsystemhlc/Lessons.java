@@ -57,4 +57,8 @@ public class Lessons {
     public void setCapacity(int value){
         this.capacity=value;
     }
+    
+    public void setDateTime(String dateTime){
+        this.dateTime=dateTime;
+    }
 }
