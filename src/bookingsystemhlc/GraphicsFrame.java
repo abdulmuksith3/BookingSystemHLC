@@ -61,7 +61,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
     private JButton studentPanelButton;
 
-    private String parentName;
+    private String parentName="";
     private JTextField parentSearchField;
     private JButton parentSearchButton;
     private JButton parentBookingButton;
@@ -103,9 +103,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         mb.add(profile);
 
         JMenu reports = new JMenu("Reports");
-        report1 = new JMenuItem("Report 1");
+        report1 = new JMenuItem("Generate Report - Lessons");
         report1.addActionListener(this);
-        report2 = new JMenuItem("Report 2");
+        report2 = new JMenuItem("Generate Report - Student");
         report2.addActionListener(this);
         reports.add(report1);
         reports.add(report2);
@@ -123,7 +123,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //            add (label2);
 //        }
         setResizable(true);
-        setSize(900, 650);
+        setSize(900, 700);
+        setLocationRelativeTo(null);
+
         setVisible(true);
     }
 
@@ -180,6 +182,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         studentPanel = new JPanel(new BorderLayout());
 
         JLabel greetingLabel = new JLabel("Hello " + student.getFullName() + "!");
+        greetingLabel.setToolTipText("Attend");
         greetingLabel.setPreferredSize(new Dimension(625, 100));
         greetingLabel.setFont(new Font("Serif", Font.BOLD, 25));
         greetingLabel.setBorder(new EmptyBorder(0, 30, 0, 0));
@@ -343,11 +346,21 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         if (e.getSource() == loginStudentButton) {
 //            res = "studentlogin";
-            studentLogin();
+            if(loginNameField.getText().length() > 0){
+                studentLogin();
+            }else{
+                JOptionPane.showMessageDialog(c, "Please enter your name in the field");
+            }
+               
         }
         if (e.getSource() == loginParentButton) {
 //            res = "parentlogin";
-            generateParentPanel();
+            
+             if(loginNameField.getText().length() > 0){
+                generateParentPanel();
+            }else{
+                JOptionPane.showMessageDialog(c, "Please enter your name in the field");
+            }
         }
         if (e.getSource() == studentSearchButton) {
 //            System.out.println(searchTypeDropdown.getSelectedItem());
@@ -390,7 +403,14 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             }
         }
         if (e.getSource() == logout) {
-            System.out.println("Loggin out");
+            System.out.println("Logging out");
+            if (student != null || parentName.length()>0) {
+                setVisible(false);
+                GraphicsFrame newFrame = new GraphicsFrame(coachesAL, studentsAL, lessonsAL, bookingsAL);
+            } else {
+                JOptionPane.showMessageDialog(c, "You are not logged in!");
+            }
+
         }
         if (e.getSource() == report1) {
             System.out.println("Report 1");
@@ -431,6 +451,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         JFrame reportFrame = new JFrame(frameName);
         reportFrame.add(panel);
         reportFrame.setSize(900, 650);
+        reportFrame.setLocationRelativeTo(null);
         reportFrame.setVisible(true);
     }
 
@@ -519,14 +540,14 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             }
         }
 
-        String[] rightTableColumnNames = {"Booking ID", "Parent","Date","Time"};
+        String[] rightTableColumnNames = {"Booking ID", "Parent", "Date", "Time"};
         for (ArrayList<Bookings> list : allCoachBookingsAL) {
 //            System.out.println("+++++++++" + list);
             String[][] rightTableData = new String[list.size()][];
 
             for (int i = 0; i < list.size(); i++) {
                 Bookings b = list.get(i);
-                String[] temp = {b.getId() + "", b.getNote(),getDayMonthYearString(b.getAppointmentBookingDateTime()), getOfficeTimeString(b.getAppointmentBookingDateTime(), b.getSlot())};
+                String[] temp = {b.getId() + "", b.getNote(), getDayMonthYearString(b.getAppointmentBookingDateTime()), getOfficeTimeString(b.getAppointmentBookingDateTime(), b.getSlot())};
                 rightTableData[i] = temp;
             }
 
@@ -584,57 +605,57 @@ public class GraphicsFrame extends JFrame implements ActionListener {
         JPanel emptySouth = new JPanel();
         JPanel emptyWest = new JPanel();
         JPanel emptyEast = new JPanel();
-        
+
         topPanel.setPreferredSize(new Dimension(900, 70));
         JLabel titleLabel = new JLabel("Student Bookings");
         topPanel.add(titleLabel);
-        ArrayList<ArrayList<Bookings>>allStudentsBookingsAL = new ArrayList<ArrayList<Bookings>>();
-        String[] tableColumnNames = {"Booking ID", "Lesson", "Date & Time","Coach"};
-        for(Student s : studentsAL){
+        ArrayList<ArrayList<Bookings>> allStudentsBookingsAL = new ArrayList<ArrayList<Bookings>>();
+        String[] tableColumnNames = {"Booking ID", "Lesson", "Date & Time", "Coach", "Status"};
+        for (Student s : studentsAL) {
             ArrayList<Bookings> studentBookingsAL = new ArrayList<Bookings>();
-            for(Bookings b : bookingsAL){
-                if(b.getBookingType().equals("Lesson") && b.getStudent().getId() == s.getId()) {
-                    
+            for (Bookings b : bookingsAL) {
+                if (b.getBookingType().equals("Lesson") && b.getStudent().getId() == s.getId()) {
+
                     studentBookingsAL.add(b);
-                    
+
                 }
             }
-            if(studentBookingsAL.size()>0){
+            if (studentBookingsAL.size() > 0) {
                 allStudentsBookingsAL.add(studentBookingsAL);
             }
         }
-        
-        for(ArrayList<Bookings> list : allStudentsBookingsAL){
+
+        for (ArrayList<Bookings> list : allStudentsBookingsAL) {
             String[][] tableData = new String[list.size()][];
             for (int i = 0; i < list.size(); i++) {
-                String[] temp = {list.get(i).getId()+"", list.get(i).getLesson().getName(), list.get(i).getLesson().getDateTime(),list.get(i).getLesson().getCoach().getFullName()};
+                String[] temp = {list.get(i).getId() + "", list.get(i).getLesson().getName(), list.get(i).getLesson().getDateTime(), list.get(i).getLesson().getCoach().getFullName(), list.get(i).getStatus()};
                 tableData[i] = temp;
             }
-            
+
             JPanel studentRecordPanel = new JPanel(new BorderLayout());
             studentRecordPanel.setPreferredSize(new Dimension(700, 100));
-            JLabel studentLabel = new JLabel("Student ID: "+list.get(0).getStudent().getId() + "    " + list.get(0).getStudent().getFullName());
-            JTable table = new JTable(tableData,tableColumnNames);
+            JLabel studentLabel = new JLabel("Student ID: " + list.get(0).getStudent().getId() + "    " + list.get(0).getStudent().getFullName());
             studentRecordPanel.add(studentLabel, BorderLayout.NORTH);
+
+            JTable table = new JTable(tableData, tableColumnNames);
+            table.setCellSelectionEnabled(false);
+
             JScrollPane tablePane = new JScrollPane(table);
             tablePane.setPreferredSize(new Dimension(800, 100));
             studentRecordPanel.add(tablePane, BorderLayout.CENTER);
             studentRecordPanel.add(new JPanel(), BorderLayout.SOUTH);
-            
+
             JScrollPane tableScrollPanel = new JScrollPane(studentRecordPanel);
             midPanel.add(tableScrollPanel);
         }
         JScrollPane midScrollPanel = new JScrollPane(midPanel);
-        
-        
-        
-        
+
         reportPanel2.add(topPanel, BorderLayout.NORTH);
         reportPanel2.add(midScrollPanel, BorderLayout.CENTER);
         reportPanel2.add(emptySouth, BorderLayout.SOUTH);
         reportPanel2.add(emptyEast, BorderLayout.EAST);
         reportPanel2.add(emptyWest, BorderLayout.WEST);
-        
+
         generateReportFrame(reportPanel2, "Report - Student Listing");
     }
 
@@ -1286,6 +1307,7 @@ public class GraphicsFrame extends JFrame implements ActionListener {
             System.out.println("Changing");
             JOptionPane.showMessageDialog(currentPanel, "Please note the next lesson you book will replace the booking you're trying to change", "Change Booking", JOptionPane.INFORMATION_MESSAGE);
             selectedBooking.setStatus("Changing Lesson");
+            selectedBooking.getLesson().setCapacity(selectedBooking.getLesson().getCapacity() + 1);
             changingBooking = selectedBooking;
             isBookingChange = true;
         }
@@ -1377,8 +1399,8 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 
         return res;
     }
-    
-        public String getDayMonthYearString(String dateTime) {
+
+    public String getDayMonthYearString(String dateTime) {
         String res = "";
 
         DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -1588,8 +1610,9 @@ public class GraphicsFrame extends JFrame implements ActionListener {
 //        studentNameField = new JTextField();
 //        studentNameField.setPreferredSize(new Dimension(200,40));
 //        studentNameField.setText(loginNameField.getText());
-        loginNameField = new JTextField();
+//        loginNameField = new JTextField();
         loginNameField.setPreferredSize(new Dimension(200, 40));
+//        loginNameField.setText(this.loginNameField.getText());
 
         studentAddressField = new JTextField();
         studentAddressField.setPreferredSize(new Dimension(200, 40));
