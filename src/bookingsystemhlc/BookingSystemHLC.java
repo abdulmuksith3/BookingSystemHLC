@@ -362,15 +362,21 @@ public static ArrayList<Bookings> generateBookingsData(ArrayList<Student> studen
         for (Student student : studentsAL) {
             
            boolean capacityCheck = false;
+//           boolean bookedCheck = false;
            
-           while(!capacityCheck){
+           while(!capacityCheck ){
+               
                randomIndex = rand.nextInt(lessonsAL.size());
                lesson = lessonsAL.get(randomIndex);
-               int capacity = lesson.getCapacity(); 
                
+               
+               
+               
+               int capacity = lesson.getCapacity(); 
                if(capacity > 0) {
                    lesson.setCapacity(capacity-1);
                    capacityCheck = true;
+                   
                }              
                
            }       
