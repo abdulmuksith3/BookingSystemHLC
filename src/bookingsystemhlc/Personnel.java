@@ -38,6 +38,22 @@ public class Personnel {
         return this.telephoneNo;
     };
     
+    public void setId(int id){
+        this.id = id;
+    };
+    
+    public void setFullName(String name){
+        this.fullName = name;
+    };
+    
+    public void setAddress(String address){
+        this.address = address;
+    };
+    
+    public void setTelephone(String telephone){
+        this.telephoneNo = telephone;
+    };
+    
         
     
     

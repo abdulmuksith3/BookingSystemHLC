@@ -54,11 +54,28 @@ public class Lessons {
         return capacity;
     }
     
-    public void setCapacity(int value){
-        this.capacity=value;
+    public void setId(int id){
+        this.id=id;
+    }
+    
+    public void setName(String name){
+        this.name = name;
+    }
+    
+    public void setPlace(String place){
+        this.place = place;
     }
     
     public void setDateTime(String dateTime){
-        this.dateTime=dateTime;
+        this.dateTime = dateTime;
     }
+    
+    public void setCoach(Coach c){
+        this.coach = c;
+    }
+    
+    public void setCapacity(int cap){
+        this.capacity=cap;
+    }    
+    
 }

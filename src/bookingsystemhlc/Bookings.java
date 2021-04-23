@@ -50,6 +50,7 @@ public class Bookings {
     public void setId(int id){
         this.id = id;
     }
+    
      
     public Student getStudent(){
         return student;
@@ -59,6 +60,7 @@ public class Bookings {
         this.student = student;
     }
     
+    
     public Lessons getLesson(){
         return lesson;
     }
@@ -66,6 +68,7 @@ public class Bookings {
     public void setLesson(Lessons lesson){
         this.lesson = lesson;
     }
+    
     
     public String getBookingType(){
         return bookingType;
@@ -75,6 +78,7 @@ public class Bookings {
         this.bookingType = type;
     }
     
+    
     public Coach getCoach(){
         return coach;
     }
@@ -82,6 +86,7 @@ public class Bookings {
     public void setCoach(Coach c) {
         this.coach=c;
     }
+    
     
     public String getNote(){
         return note;
@@ -91,6 +96,7 @@ public class Bookings {
         this.note = s;
     }
     
+    
     public int getSlot(){
         return slot;
     }
@@ -99,6 +105,7 @@ public class Bookings {
         this.slot = slot;
     }
     
+    
     public String getStatus(){
         return status;
     }
@@ -106,6 +113,7 @@ public class Bookings {
     public void setStatus(String s){
         this.status=s;
     }
+    
     
     public String getAppointmentBookingDateTime() {
         return appointmentDateTime;

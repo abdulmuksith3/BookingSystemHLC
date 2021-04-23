@@ -17,8 +17,7 @@ public class Coach extends Personnel {
         
     }
     
-     public String[] getExpertise(){
-       
+    public String[] getExpertise(){       
         return expertise;
     }
     
@@ -32,6 +31,14 @@ public class Coach extends Personnel {
     
     public String getOfficeHour(){
         return officeHour;
+    }
+    
+    public void setExpertise (String[] expertise){
+        this.expertise = expertise;
+    }
+    
+    public void setOfficeHour(String officeHour){
+        this.officeHour = officeHour;
     }
     
     
