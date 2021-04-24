@@ -66,13 +66,15 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
     private JTable coachesTable;
     private JTable appointmentTable;
     private Coach selectedCoach;
+    private JButton appointmentBookingBackButton;
 
     private JTextField studentAddressField, studentTelephoneField;
     private JButton newStudentRegisterButton;
 
     private JMenuItem logout, report1, report2;
 
-    public GraphicsFrame() {}
+    public GraphicsFrame() {
+    }
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
         super("Booking System HLC");
@@ -159,8 +161,6 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         mainPanel.add(southPanel, BorderLayout.SOUTH);
     }
 
-    
-    
     //-------------------Student Start--------------------------------
     public void studentLogin() {
 
@@ -229,7 +229,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         rowOne.setPreferredSize(new Dimension(200, 100));
 
         String[][] tableData = new String[lessonsAL2.size()][];
-        String[] columnNames = {"Lesson ID", "Expertise", "Coach", "Date&Time", "Location", "Capacity", "Click on Status"};
+        String[] columnNames = {"Lesson ID", "Expertise", "Coach", "Date&Time", "Location", "Capacity", "Click Below"};
         int counter = 0;
         for (Lessons l : lessonsAL2) {
             String bookingButton = "Available";
@@ -358,7 +358,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             System.out.println("Expertise Search");
             for (Lessons l : lessonsAL) {
                 if (l.getName().toLowerCase().contains(searchValue.toLowerCase())) {
-                    System.out.println(l.getId() + "\t" + l.getName() + "\t" + l.getCoach().getFullName() + "\t" + l.getDateTime() + "\t" + l.getPlace() + "\t" + l.getCapacity());
+//                    System.out.println(l.getId() + "\t" + l.getName() + "\t" + l.getCoach().getFullName() + "\t" + l.getDateTime() + "\t" + l.getPlace() + "\t" + l.getCapacity());
                     tempAL.add(l);
                 }
             }
@@ -366,7 +366,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             System.out.println("Coach Search");
             for (Lessons l : lessonsAL) {
                 if (l.getCoach().getFullName().toLowerCase().contains(searchValue.toLowerCase())) {
-                    System.out.println(l.getId() + "\t" + l.getName() + "\t" + l.getCoach().getFullName() + "\t" + l.getDateTime() + "\t" + l.getPlace() + "\t" + l.getCapacity());
+//                    System.out.println(l.getId() + "\t" + l.getName() + "\t" + l.getCoach().getFullName() + "\t" + l.getDateTime() + "\t" + l.getPlace() + "\t" + l.getCapacity());
                     tempAL.add(l);
                 }
             }
@@ -435,7 +435,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
 
     }
 
-    public void generateMyBookings() {
+    public void generateStudentTimetablePanel() {
         System.out.println("MyBookings Panel");
         bookingPanel = new JPanel(new BorderLayout());
 
@@ -612,9 +612,6 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
 //        bookingPanel.setVisible(false);
     }
 
-    
-    
-    
     //-------------------Parent Start-------------------------------    
     public void generateParentPanel() {
         parentPanel = new JPanel(new BorderLayout());
@@ -638,7 +635,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         midPanelTop.add(parentSearchField);
         midPanelTop.add(parentSearchButton);
 
-        String[] columnNames = {"Coach ID", "Name", "Phone", "Expertise", "Office Hours", "Book"};
+        String[] columnNames = {"Coach ID", "Name", "Phone", "Expertise", "Office Hours", "Click Below"};
         String[][] tableData = new String[coachesAL2.size()][];
         int counter = 0;
 
@@ -680,7 +677,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         ArrayList<Coach> tempAL = new ArrayList<Coach>();
 
         for (Coach c : coachesAL) {
-            if (c.getFullName().toLowerCase().contains(searchValue.toLowerCase())) {
+            if (c.getFullName().toLowerCase().contains(searchValue.toLowerCase()) || c.getExpertiseString().toLowerCase().contains(searchValue.toLowerCase())) {
                 tempAL.add(c);
             }
         }
@@ -712,11 +709,14 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         titleLabel.setPreferredSize(new Dimension(400, 50));
         JLabel subTitleLabel = new JLabel("Office Hour Timing: " + dt.getOfficeHourShortString(selectedCoach.getOfficeHour()));
         subTitleLabel.setPreferredSize(new Dimension(400, 100));
+        appointmentBookingBackButton = new JButton("Go Back");
+        appointmentBookingBackButton.addActionListener(this);
 
-        topPanel.add(titleLabel, BorderLayout.NORTH);
-        topPanel.add(subTitleLabel, BorderLayout.CENTER);
+        topPanel.add(appointmentBookingBackButton, BorderLayout.NORTH);
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+        topPanel.add(subTitleLabel, BorderLayout.SOUTH);
 
-        String[] columnNames = {"Date", "Time", "Book Slot"};
+        String[] columnNames = {"Date", "Time", "Click Below"};
         String[][] tableData = new String[12][];
 //        ArrayList<String[]> data = new ArrayList<String[]>();
         ArrayList<Bookings> selectedCoachAppointmentsAL = new ArrayList<Bookings>();
@@ -824,9 +824,6 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
 
     }
 
-    
-    
-    
     //-------------------EventHandler Start------------------------------- 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -851,7 +848,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             studentSearch();
         }
         if (e.getSource() == myBookingsButton) {
-            generateMyBookings();
+            generateStudentTimetablePanel();
         }
         if (e.getSource() == studentPanelButton) {
             bookingPanel.setVisible(false);
@@ -874,14 +871,14 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             if (weekNo > 1) {
                 weekNo--;
                 bookingPanel.setVisible(false);
-                generateMyBookings();
+                generateStudentTimetablePanel();
             }
         }
         if (e.getSource() == nextWeekButton) {
             if (weekNo < 4) {
                 weekNo++;
                 bookingPanel.setVisible(false);
-                generateMyBookings();
+                generateStudentTimetablePanel();
             }
         }
         if (e.getSource() == logout) {
@@ -903,6 +900,10 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             System.out.println("Report 2");
             Report r = new Report(coachesAL, studentsAL, lessonsAL, bookingsAL);
             r.generateReport2();
+        }
+        if(e.getSource() == appointmentBookingBackButton){
+            coachAppointmentPanel.setVisible(false);
+            generateParentPanel();
         }
 
     }
