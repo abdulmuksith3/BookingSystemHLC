@@ -21,7 +21,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
     private ArrayList<Student> studentsAL;
     private ArrayList<Lessons> lessonsAL;
     private ArrayList<Bookings> bookingsAL;
-
+    
     private ArrayList<Lessons> lessonsAL2;
     private ArrayList<Coach> coachesAL2;
 
@@ -74,6 +74,18 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
     private JMenuItem logout, report1, report2;
 
     public GraphicsFrame() {
+    }
+
+    public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL, String test) {
+        //Constructor for JUnit Testing Purposes
+        this.coachesAL = coachesAL;
+        this.studentsAL = studentsAL;
+        this.lessonsAL = lessonsAL;
+        this.bookingsAL = bookingsAL;
+        this.lessonsAL2 = lessonsAL;
+        this.coachesAL2 = coachesAL;
+        
+        
     }
 
     public GraphicsFrame(ArrayList<Coach> coachesAL, ArrayList<Student> studentsAL, ArrayList<Lessons> lessonsAL, ArrayList<Bookings> bookingsAL) {
@@ -350,9 +362,19 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         add(newStudentPanel);
     }
 
-    public void studentSearch() {
-        String searchType = searchTypeDropdown.getSelectedItem() + "";
-        String searchValue = studentSearchField.getText();
+    public ArrayList<Lessons> studentLessonSearch(String value, String type) {
+        String searchType = "";
+        String searchValue = "";
+
+//     For JUnit testing purposes
+        if (value != "" && type != "") {
+            searchType = type;
+            searchValue = value;
+        } else {
+            searchType = searchTypeDropdown.getSelectedItem() + "";
+            searchValue = studentSearchField.getText();
+        }
+
         ArrayList<Lessons> tempAL = new ArrayList<Lessons>();
         if (searchType.equals("Expertise")) {
             System.out.println("Expertise Search");
@@ -373,9 +395,14 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         }
 
         lessonsAL2 = tempAL;
-
+        //        For JUnit testing purposes     
+        if (value != "" && type != "") {
+            return tempAL;
+        }
         studentPanel.setVisible(false);
         generateStudentPanel();
+
+        return null;
     }
 
     public void studentLessonBooking() {
@@ -498,11 +525,12 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         for (int i = 0; i < rowTitles.length; i++) {
             timeTable.setValueAt(rowTitles[i], i, 0);
         }
-
+        
         for (Bookings b : studentBookingsAL) {
             if ((b.getStatus().equals("Booked") || b.getStatus().equals("Attended")) && dt.getBookingWeek(b.getLesson().getDateTime()) == weekNo) {
 //                System.out.println("TimeTable -------------" + b.getId() + "\t" + b.getStatus());
-                Lessons l = b.getLesson();
+               System.out.println("////////////////////////// " + b.getLesson().getDateTime());
+Lessons l = b.getLesson();
                 String value = "(ID " + b.getId() + ") " + l.getName();
                 String day = dt.getDayString(l.getDateTime());
                 String time = dt.getTimeString(l.getDateTime());
@@ -565,7 +593,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         }
     }
 
-    public void handleBooking(Bookings selectedBooking, JPanel currentPanel) {
+    public String handleBooking(Bookings selectedBooking, JPanel currentPanel) {
         int res = 0;
         String[] options = {"Attend", "Cancel Booking", "Change Booking"};
         if (selectedBooking.getStatus().equals("Attended")) {
@@ -610,6 +638,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         studentBookingsAL.add(studentBookingIndex, selectedBooking);
 
 //        bookingPanel.setVisible(false);
+        return "";
     }
 
     //-------------------Parent Start-------------------------------    
@@ -672,16 +701,26 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
 
     }
 
-    public void parentSearch() {
-        String searchValue = parentSearchField.getText();
-        ArrayList<Coach> tempAL = new ArrayList<Coach>();
+    public ArrayList<Coach> parentCoachSearch(String value, String type) {
+        String searchValue = "";
 
+//        For JUnit testing purposes
+        if (value != "" && type != "") {
+            searchValue = value;
+        } else {
+            searchValue = parentSearchField.getText();
+        }
+
+        ArrayList<Coach> tempAL = new ArrayList<Coach>();
         for (Coach c : coachesAL) {
             if (c.getFullName().toLowerCase().contains(searchValue.toLowerCase()) || c.getExpertiseString().toLowerCase().contains(searchValue.toLowerCase())) {
                 tempAL.add(c);
             }
         }
         coachesAL2 = tempAL;
+
+//        For JUnit testing purposes
+        return tempAL;
     }
 
     public void generateCoachAppointmentPanel() {
@@ -845,7 +884,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             }
         }
         if (e.getSource() == studentSearchButton) {
-            studentSearch();
+            studentLessonSearch("", "");
         }
         if (e.getSource() == myBookingsButton) {
             generateStudentTimetablePanel();
@@ -856,7 +895,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
         }
         if (e.getSource() == parentSearchButton) {
             parentPanel.setVisible(false);
-            parentSearch();
+            parentCoachSearch("", "");
             generateParentPanel();
         }
         if (e.getSource() == newStudentRegisterButton) {
@@ -901,7 +940,7 @@ public class GraphicsFrame extends JFrame implements ActionListener, MouseListen
             Report r = new Report(coachesAL, studentsAL, lessonsAL, bookingsAL);
             r.generateReport2();
         }
-        if(e.getSource() == appointmentBookingBackButton){
+        if (e.getSource() == appointmentBookingBackButton) {
             coachAppointmentPanel.setVisible(false);
             generateParentPanel();
         }

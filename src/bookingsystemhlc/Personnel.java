@@ -22,7 +22,6 @@ public class Personnel {
        this.fullName = fullName;
        this.address = address;
        this.telephoneNo = telephoneNo;
-       
     };
     
     public int getId(){
